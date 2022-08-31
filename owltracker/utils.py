@@ -33,5 +33,6 @@ def time_to_formated_string(time_time: float):
     else:
         return f'{time_time % 60:.1f}'
 
+
 import time
 print(time_to_formated_string(time.time() - 1661894731.1254854))
