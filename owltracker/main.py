@@ -19,7 +19,7 @@ from owltracker.ui.layouts import create_after_idle_window
 from owltracker.ui.layouts import create_idle_text
 from owltracker.ui.layouts import start_time_text
 from owltracker.ui.layouts import stop_time_text
-from owltracker.ui.user_settings import last_location_settings_format
+from owltracker.ui.user_settings import last_location_settings_format, set_last_window_location
 from owltracker.ui.user_settings import add_used_task
 
 import PySimpleGUI as sg
@@ -96,7 +96,7 @@ while True:
         else:
             window[idle_text_key].update(create_idle_text(idle_time))
         
-    sg.user_settings_set_entry(last_location_settings_format.format(window.Title), window.current_location())
+    set_last_window_location(window.Title, window.current_location())
     
     if input_task_key in values:
         task_name = values[input_task_key]

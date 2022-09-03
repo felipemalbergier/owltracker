@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from owltracker.ui.user_settings import last_location_settings_format
 from owltracker.ui.user_settings import get_tasks_list_selector
+from owltracker.ui.user_settings import get_last_window_location
 
 input_task_key = '-INPUT_TASK-'
 stopwatch_button_key = '-STOPWATCH_BUTTON-'
@@ -30,7 +30,7 @@ def create_window(task_name=''):
         [sg.Button(start_time_text, key=stopwatch_button_key), sg.Button('Exit')],
         [sg.Button('Minimize', key=minimize_button_key, visible=False)]
     ]
-    location = sg.user_settings_get_entry(last_location_settings_format.format(title_window), (None, None))
+    location = get_last_window_location(title_window)
     return sg.Window(title_window, 
                     layout, 
                     size=size_window, 
@@ -44,7 +44,7 @@ def create_minimized_window(task_name):
             sg.Text(task_name, key=minimized_task_key, auto_size_text=True, justification='left', enable_events=True, size=size_task_name),
             sg.Push(), sg.Text("timer", key=stopwatch_text_key, auto_size_text=True, justification='right', enable_events=True)
     ]]
-    location = sg.user_settings_get_entry(last_location_settings_format.format(minimized_title_window), (None, None))
+    location = get_last_window_location(minimized_title_window)
     return sg.Window(minimized_title_window, 
                     layout, 
                     size=size_minimized_window, 
@@ -65,7 +65,7 @@ def create_after_idle_window(idle_time=1):
             sg.Button("Ignore time", key=ignore_time_key)]
             
     ]
-    location = sg.user_settings_get_entry(last_location_settings_format.format(minimized_title_window), (None, None))
+    location = get_last_window_location(minimized_title_window)
     return sg.Window(idle_title_window, 
                     layout, 
                     size=(300, 150), 
