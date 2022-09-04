@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from owltracker.integrations.clickup.clickup import get_list_tasks
 
 last_location_settings_format = '-LAST_LOCATION_{}-'
 tasks_list_settings = 'tasks_list'
@@ -6,7 +7,9 @@ tasks_list_settings = 'tasks_list'
 def get_tasks_list_selector() -> list:
     if tasks_list_settings not in sg.user_settings():
         sg.user_settings_set_entry(tasks_list_settings, list())
-    return sg.user_settings_get_entry(tasks_list_settings)
+    clickup_tasks = get_list_tasks()
+    clickup_tasks = [task['name'] for task in clickup_tasks]
+    return sg.user_settings_get_entry(tasks_list_settings) + clickup_tasks
 
 def add_used_task(task_name: str) -> None:
     if task_name not in sg.user_settings_get_entry(tasks_list_settings, list()):

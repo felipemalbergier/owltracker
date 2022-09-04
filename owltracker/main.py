@@ -60,7 +60,7 @@ while True:
             start_time = time.time()
             window[stopwatch_button_key].update(stop_time_text)
             task_notification_start_time = time.time()
-            add_used_task(task_name)
+            # add_used_task(task_name)
         else:
             stopwatch_active = False
             time_spent = time.time() - start_time
