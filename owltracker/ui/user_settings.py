@@ -25,8 +25,9 @@ def update_time_integration(task_name: str, task_time: str):
                 break
     
     if used_task:
-        update_time_task(used_task['id'], task_time)
-        
+        r = update_time_task(used_task['id'], task_time)
+        if r.ok:
+            sg.SystemTray.notify(f'{used_task["integration"]} task updated', f'{used_task["name"]}')    
         
         
 def add_used_task(task_name: str) -> None:

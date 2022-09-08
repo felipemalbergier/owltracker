@@ -33,7 +33,7 @@ def get_list_tasks() -> list[dict]:
     return tasks
     
 
-def update_time_task(task_id: str, task_time: float) -> None:
+def update_time_task(task_id: str, task_time: float) -> requests.models.Response:
     url = f"https://api.clickup.com/api/v2/team/{WORKSPACE_ID}/time_entries/"
     payload={
     "description": "from owltracker",
@@ -49,7 +49,7 @@ def update_time_task(task_id: str, task_time: float) -> None:
     "tid": f"{task_id}"
     }
     response = requests.request("POST", url, headers=headers, json=payload)
-    print(response.text)
+    return response
 
 if __name__ == "__main__":
     get_list_tasks()
