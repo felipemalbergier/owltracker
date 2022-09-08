@@ -55,13 +55,13 @@ while True:
         print(event)
     
     if event == stopwatch_button_key:
-        if not stopwatch_active:
+        if not stopwatch_active: # START TIMER
             stopwatch_active = True
             start_time = time.time()
             window[stopwatch_button_key].update(stop_time_text)
             task_notification_start_time = time.time()
             # add_used_task(task_name)
-        else:
+        else:                    # STOP TIMER
             stopwatch_active = False
             time_spent = time.time() - start_time
             print(f"Ran for {time_spent} seconds")
