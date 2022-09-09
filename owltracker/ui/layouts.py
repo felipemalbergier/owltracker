@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from owltracker.ui.user_settings import get_tasks_list_selector
-from owltracker.ui.user_settings import get_last_window_location
+from owltracker.data.user_settings import get_tasks_list_selector
+from owltracker.data.user_settings import get_last_window_location
 
 input_task_key = '-INPUT_TASK-'
 stopwatch_button_key = '-STOPWATCH_BUTTON-'
@@ -28,7 +28,7 @@ def create_window(task_name=''):
         [sg.Text('TIME', key=stopwatch_text_key, font='arial 45', justification='center')],
         [sg.Combo(get_tasks_list_selector(), default_value=task_name, key=input_task_key, font='arial 17', size=size_combo)],
         [sg.Button(start_time_text, key=stopwatch_button_key), sg.Button('Exit')],
-        [sg.Button('Minimize', key=minimize_button_key, visible=False)]
+        [sg.Button('Minimize', key=minimize_button_key)]
     ]
     location = get_last_window_location(title_window)
     return sg.Window(title_window, 

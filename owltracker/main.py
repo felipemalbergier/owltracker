@@ -19,8 +19,8 @@ from owltracker.ui.layouts import create_after_idle_window
 from owltracker.ui.layouts import create_idle_text
 from owltracker.ui.layouts import start_time_text
 from owltracker.ui.layouts import stop_time_text
-from owltracker.ui.user_settings import last_location_settings_format, set_last_window_location
-from owltracker.ui.user_settings import add_used_task
+from owltracker.data.user_settings import set_last_window_location
+from owltracker.data.user_settings import add_used_task
 
 import PySimpleGUI as sg
 from plyer import notification
@@ -49,43 +49,45 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     print(event, values)
-    if event == 'Button':
-        print('You pressed the button')
-        print(values)
-        print(event)
     
     if event == stopwatch_button_key:
-        if not stopwatch_active: # START TIMER
+        if not stopwatch_active: # CLICK START TIMER
             stopwatch_active = True
             start_time = time.time()
-            window[stopwatch_button_key].update(stop_time_text)
-            task_notification_start_time = time.time()
-            # add_used_task(task_name)
-        else:                    # STOP TIMER
+            window[stopwatch_button_key].update(stop_time_text) # move to view
+            task_notification_start_time = time.time() # move to view
+            # add_used_task(task_name) # TODO implement it
+        else:                    # CLiCK STOP TIMER
             stopwatch_active = False
             time_spent = time.time() - start_time
             print(f"Ran for {time_spent} seconds")
-            save_time(values[input_task_key], time_spent)
-            window[stopwatch_button_key].update(start_time_text)
-            task_notification_start_time = time.time()
+            save_time(values[input_task_key], time_spent) # move to model
+            window[stopwatch_button_key].update(start_time_text) # move to view
+            task_notification_start_time = time.time() # move to view
     
+    # Update timer
     if event == '__TIMEOUT__' and stopwatch_active and window.Title != idle_title_window:
-        elapsed_time = time_to_formated_string(time.time() - start_time)
-        window[stopwatch_text_key].update(elapsed_time)
+        elapsed_time = time_to_formated_string(time.time() - start_time) # to view
+        window[stopwatch_text_key].update(elapsed_time) # to view
         
-        if minimize_button_key in [e.key for e in window.element_list()]:
-            window[minimize_button_key].update(visible=True)
+        # make sure minimize button is active because it only appear
+        print("should visible minimeze?")
+        # if minimize_button_key in [e.key for e in window.element_list()]:
+        #     window[minimize_button_key].update(visible=True)
 
+    # Click to Minimize window
     if event == minimize_button_key:
         window.close()
         window = create_minimized_window(task_name=values[input_task_key])
         continue # need to 'read' again to execute code
     
+    # Click minimized window to go to main screen
     if window.Title == minimized_title_window and event in [minimized_task_key, stopwatch_text_key]:
         window.close()
         window = create_window(task_name=window[minimized_task_key].DisplayText)
         continue # need to 'read' again to execute code
     
+    # Create idle window to verify idle time
     idle_time = get_idle_time()
     if idle_time > limit_idle_time_with_task and stopwatch_active:
         if window.Title != idle_title_window:
@@ -95,13 +97,14 @@ while True:
             continue # need to 'read' again to execute code
         else:
             window[idle_text_key].update(create_idle_text(idle_time))
-        
+    
     set_last_window_location(window.Title, window.current_location())
     
     if input_task_key in values:
         task_name = values[input_task_key]
     
-    if not task_name and time.time() - task_notification_start_time > limit_time_no_task_selected:
+    # notify if not working on task for more than X seconds
+    if not stopwatch_active and time.time() - task_notification_start_time > limit_time_no_task_selected:
         notification.notify(
         title='Are you working on a task?',
         message="Don't forget to add to Owlltracker",
@@ -110,7 +113,8 @@ while True:
         )
         task_notification_start_time = time.time()
     
-    if task_name and time.time() - task_notification_start_time > limit_time_with_task_selected:
+    # notify if working on task for more than Y seconds
+    if stopwatch_active and time.time() - task_notification_start_time > limit_time_with_task_selected:
         notification.notify(
         title=f'Still working on {task_name}',
         message="Don't forget to update on Owlltracker",
@@ -119,7 +123,7 @@ while True:
         )
         task_notification_start_time = time.time()
     
-    
+    # Actions for idle screen
     if event == ignore_time_key:
         window.close()
         window = create_minimized_window(task_name)

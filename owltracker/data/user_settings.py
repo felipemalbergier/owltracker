@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from owltracker.integrations.clickup.clickup import get_list_tasks
-from owltracker.integrations.clickup.clickup import update_time_task
+from owltracker.data.integrations.clickup.clickup import get_list_tasks
+from owltracker.data.integrations.clickup.clickup import update_time_task
 
 last_location_settings_format = '-LAST_LOCATION_{}-'
 tasks_list_settings = 'tasks_list'
