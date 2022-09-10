@@ -74,12 +74,21 @@ def create_after_idle_window(idle_time=1):
                     grab_anywhere=True,
                     location=location,
                     alpha_channel=.6)
-    
 
+    
 def create_idle_text(idle_time):
     idle_time_string = f'{idle_time//60:.0f} minutes'
     idle_text = f"You were idle for\n{idle_time_string}\nWhat do you want to do?"
     return idle_text
 
-
+def change_text_stopwatch_button(window, text):
+    window[stopwatch_button_key].update(text)
     
+def stop_text_stopwatch_button(window):
+    change_text_stopwatch_button(window, stop_time_text)
+    
+def start_text_stopwatch_button(window):
+    change_text_stopwatch_button(window, start_time_text)
+    
+def update_idle_text(window, idle_time):
+    window[idle_text_key].update(create_idle_text(idle_time))
