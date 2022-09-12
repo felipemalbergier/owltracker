@@ -1,3 +1,5 @@
+from owltracker.data.integrations.task import LocalTask
+from owltracker.data.integrations.task import Task
 from owltracker.data.model import Model
 from owltracker.ui.notification import Notification
 from owltracker.utils import time_to_formated_string
@@ -15,7 +17,7 @@ from owltracker.ui.layouts import ignore_time_key
 from owltracker.ui.layouts import subtract_time_key
 from owltracker.ui.layouts import minimized_title_window
 from owltracker.ui.layouts import idle_title_window
-from owltracker.ui.layouts import create_window
+from owltracker.ui.layouts import create_main_window
 from owltracker.ui.layouts import create_minimized_window
 from owltracker.ui.layouts import create_after_idle_window
 from owltracker.ui.notification import limit_idle_time_with_task
@@ -36,19 +38,17 @@ class Controller:
         self.stopwatch_active = False
         self.idle_start_time = 0
         self.start_time = 0
-        self.idle_time = 0
-        self.task_name = ''
+        self.idle_time = 0       
 
-    def initialize(self):
-        window = create_window()
-        window.read(timeout=100)
-        list_tasks = self.model.get_tasks_list_selector()
-        update_list_tasks(window, list_tasks)
+    def create_main_window(self):
+        self.model.fetch_tasks_list_selector()
+        # list_tasks = [f"essa eh uma task bacana de bobo{i}" for i in range(9)]
+        # self.model.current_tasks = list_tasks
+        window = create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
         return window
         
-
     def run(self):
-        window = self.initialize()
+        window = self.create_main_window()
         while True:
             event, values = window.read(timeout=100)
             
@@ -67,7 +67,7 @@ class Controller:
                     self.stopwatch_active = False
                     time_spent = time.time() - self.start_time
                     print(f"Ran for {time_spent} seconds")
-                    self.model.save_time(values[input_task_key], time_spent) # move to model
+                    self.model.save_time(self.model.current_task, time_spent) # move to model
                     start_text_stopwatch_button(window)
                     task_notification_start_time = time.time() # move to view
             
@@ -87,10 +87,10 @@ class Controller:
                 window = create_minimized_window(task=values[input_task_key])
                 continue # need to 'read' again to execute code
             
-            # Click minimized window to go to main screen
+            # Click to go to main Window
             if window.Title == minimized_title_window and event in [minimized_task_key, stopwatch_text_key]:
                 window.close()
-                window = create_window(task=values[input_task_key], stop_watch_active=self.stopwatch_active)
+                window = self.create_main_window()
                 continue # need to 'read' again to execute code
             
             # Create idle window to verify idle time
@@ -107,7 +107,11 @@ class Controller:
             set_last_window_location(window.Title, window.current_location())
             
             if input_task_key in values:
-                self.task_name = values[input_task_key]
+                input_value = values[input_task_key]
+                if isinstance(input_value, Task):
+                    self.model.current_task = values[input_task_key]
+                else:
+                    self.model.current_task = LocalTask(input_value)
             
             # notify if not working on task for more than X seconds
             if not self.stopwatch_active and time.time() - self.notification.task_notification_start_time > limit_time_no_task_selected:
@@ -115,7 +119,7 @@ class Controller:
             
             # notify if working on task for more than Y seconds
             if self.stopwatch_active and time.time() - self.notification.task_notification_start_time > limit_time_with_task_selected:
-                self.notification.notify_working_same_task(self.task_name)
+                self.notification.notify_working_same_task(self.model.current_task.title)
             
             # Actions for idle screen
             if event == ignore_time_key:

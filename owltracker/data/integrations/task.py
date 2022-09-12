@@ -18,6 +18,14 @@ class Task(ABC):
 
     def __repr__(self) -> str:
         return f"{self.integration} task | Title: {self.title}"
-    
+
+@dataclass
+class LocalTask(Task):
+    def __init__(self, task_title) -> None:
+        self.title = task_title
+        self.integration = ""
+        self.id = ""
+
+
 if __name__ == "__main__":
     t = Task()

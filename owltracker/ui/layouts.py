@@ -21,12 +21,12 @@ start_time_text = 'Start Timer'
 stop_time_text = 'Stop'
 
 
-def create_window(task='', stop_watch_active=False):
+def create_main_window(task=None, task_list=None, stopwatch_active=False):
     size_combo = (int(size_window[0] * 0.8),)
-    button_text = start_time_text if not stop_watch_active else stop_time_text
+    button_text = start_time_text if not stopwatch_active else stop_time_text
     layout = [
         [sg.Text('TIME', key=stopwatch_text_key, font='arial 45', justification='center')],
-        [sg.Combo(values=list(), default_value=task, key=input_task_key, font='arial 17', size=size_combo)],
+        [sg.Combo(values=task_list, default_value=task, key=input_task_key, font='arial 17', size=size_combo)],
         [sg.Button(button_text, key=stopwatch_button_key), sg.Button('Exit')],
         [sg.Button('Minimize', key=minimize_button_key)]
     ]
@@ -92,6 +92,3 @@ def start_text_stopwatch_button(window):
     
 def update_idle_text(window, idle_time):
     window[idle_text_key].update(create_idle_text(idle_time))
-
-def update_list_tasks(window, task_list):
-    window[input_task_key].update(values=task_list)

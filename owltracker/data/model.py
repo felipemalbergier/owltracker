@@ -10,20 +10,22 @@ tasks_list_settings = 'tasks_list'
 
 
 class Model:
-    TIMES_FILES = os.path.join(os.path.dirname(__file__), "time_database.csv") 
+    TIMES_FILES = os.path.join(os.path.dirname(os.path.dirname(__file__)), "time_database.csv") 
     COLUMNS_TIME_FILES = ['Time Input', 'Task Name', 'Time Spent', "Integration", "Integration ID"]
     def __init__(self) -> None:
         self.integrations = {"clickup": Clickup()}
         self.notification = Notification()
+        self.current_tasks = list()
+        self.current_task = None
 
-    def get_tasks_list_selector(self) -> list:        
+    def fetch_tasks_list_selector(self) -> None:        
         integrations_tasks = list()
         for integration in self.integrations.values():
             integration_tasks = integration.get_list_tasks()
             integrations_tasks += integration_tasks
                     
         manually_added_tasks = get_entry_user_settings(tasks_list_settings, list())
-        return manually_added_tasks + integrations_tasks
+        self.current_tasks = manually_added_tasks + integrations_tasks
 
     def update_time_integration(self, task: Task, task_time: str):
         if task.integration:
