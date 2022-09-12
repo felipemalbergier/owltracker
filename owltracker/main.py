@@ -8,7 +8,6 @@ from owltracker.ui.layouts import input_task_key
 from owltracker.ui.layouts import start_text_stopwatch_button
 from owltracker.ui.layouts import stop_text_stopwatch_button
 from owltracker.ui.layouts import update_idle_text
-from owltracker.ui.layouts import update_list_tasks
 from owltracker.ui.layouts import stopwatch_button_key
 from owltracker.ui.layouts import stopwatch_text_key
 from owltracker.ui.layouts import minimize_button_key
@@ -73,16 +72,11 @@ class Controller:
             if event == '__TIMEOUT__' and self.stopwatch_active and window.Title != idle_title_window:
                 elapsed_time = time_to_formated_string(time.time() - self.start_time) # to view
                 window[stopwatch_text_key].update(elapsed_time) # to view
-                
-                # make sure minimize button is active because it only appear
-                print("should visible minimeze?")
-                # if minimize_button_key in [e.key for e in window.element_list()]:
-                #     window[minimize_button_key].update(visible=True)
 
             # Click to Minimize window
             if event == minimize_button_key:
                 window.close()
-                window = create_minimized_window(task=values[input_task_key])
+                window = create_minimized_window(task=self.model.current_task)
                 continue # need to 'read' again to execute code
             
             # Click to go to main Window

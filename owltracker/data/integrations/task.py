@@ -1,19 +1,19 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-
+from dataclasses import field
 
 @dataclass
 class Task(ABC):
     id: str
     title: str
-    original_data: dict
     integration: str
+    original_data: dict = field(repr=False, default_factory=dict)
         
     @abstractmethod
     def __init__(self, original_data) -> None:
         pass
         
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
 
     def __repr__(self) -> str:
@@ -28,4 +28,7 @@ class LocalTask(Task):
 
 
 if __name__ == "__main__":
-    t = Task()
+    t = LocalTask("title")
+    print(t)
+    print("o")
+    

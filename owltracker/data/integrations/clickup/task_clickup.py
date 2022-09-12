@@ -3,9 +3,6 @@ from owltracker.data.integrations.task import Task
 
 @dataclass
 class ClickupTask(Task):
-    # attributes_map = { # clickup_id:
-    #     "id": "id"
-    # }
     
     def __init__(self, original_data) -> None:
         self.integration = 'clickup'
@@ -15,4 +12,3 @@ class ClickupTask(Task):
 
 if __name__ == "__main__":
     t = ClickupTask(original_data={"id": 1, "name": "oi"})
-    
