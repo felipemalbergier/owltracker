@@ -1,20 +1,23 @@
+from owltracker.data.model import Model
 from owltracker.ui.notification import Notification
-from owltracker.utils import save_time, time_to_formated_string
+from owltracker.utils import time_to_formated_string
 from owltracker.idle import get_idle_time
-from owltracker.ui.layouts import input_task_key, start_text_stopwatch_button, stop_text_stopwatch_button, update_idle_text
+from owltracker.ui.layouts import input_task_key
+from owltracker.ui.layouts import start_text_stopwatch_button
+from owltracker.ui.layouts import stop_text_stopwatch_button
+from owltracker.ui.layouts import update_idle_text
+from owltracker.ui.layouts import update_list_tasks
 from owltracker.ui.layouts import stopwatch_button_key
 from owltracker.ui.layouts import stopwatch_text_key
 from owltracker.ui.layouts import minimize_button_key
 from owltracker.ui.layouts import minimized_task_key
 from owltracker.ui.layouts import ignore_time_key
 from owltracker.ui.layouts import subtract_time_key
-from owltracker.ui.layouts import idle_text_key
 from owltracker.ui.layouts import minimized_title_window
 from owltracker.ui.layouts import idle_title_window
 from owltracker.ui.layouts import create_window
 from owltracker.ui.layouts import create_minimized_window
 from owltracker.ui.layouts import create_after_idle_window
-from owltracker.ui.layouts import create_idle_text
 from owltracker.ui.notification import limit_idle_time_with_task
 from owltracker.ui.notification import limit_time_no_task_selected
 from owltracker.ui.notification import limit_time_with_task_selected
@@ -29,17 +32,26 @@ import time
 class Controller:
     def __init__(self) -> None:
         self.notification = Notification()
+        self.model = Model()
         self.stopwatch_active = False
         self.idle_start_time = 0
         self.start_time = 0
         self.idle_time = 0
         self.task_name = ''
 
-    def run(self):
+    def initialize(self):
         window = create_window()
+        window.read(timeout=100)
+        list_tasks = self.model.get_tasks_list_selector()
+        update_list_tasks(window, list_tasks)
+        return window
+        
+
+    def run(self):
+        window = self.initialize()
         while True:
             event, values = window.read(timeout=100)
-
+            
             if event == sg.WIN_CLOSED or event == 'Exit':
                 break
             print(event, values)
@@ -55,7 +67,7 @@ class Controller:
                     self.stopwatch_active = False
                     time_spent = time.time() - self.start_time
                     print(f"Ran for {time_spent} seconds")
-                    save_time(values[input_task_key], time_spent) # move to model
+                    self.model.save_time(values[input_task_key], time_spent) # move to model
                     start_text_stopwatch_button(window)
                     task_notification_start_time = time.time() # move to view
             
@@ -72,13 +84,13 @@ class Controller:
             # Click to Minimize window
             if event == minimize_button_key:
                 window.close()
-                window = create_minimized_window(task_name=values[input_task_key])
+                window = create_minimized_window(task=values[input_task_key])
                 continue # need to 'read' again to execute code
             
             # Click minimized window to go to main screen
             if window.Title == minimized_title_window and event in [minimized_task_key, stopwatch_text_key]:
                 window.close()
-                window = create_window(task_name=window[minimized_task_key].DisplayText)
+                window = create_window(task=values[input_task_key], stop_watch_active=self.stopwatch_active)
                 continue # need to 'read' again to execute code
             
             # Create idle window to verify idle time

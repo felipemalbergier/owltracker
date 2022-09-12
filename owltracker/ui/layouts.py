@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-from owltracker.data.user_settings import get_tasks_list_selector
 from owltracker.data.user_settings import get_last_window_location
 
 input_task_key = '-INPUT_TASK-'
@@ -22,12 +21,13 @@ start_time_text = 'Start Timer'
 stop_time_text = 'Stop'
 
 
-def create_window(task_name=''):
+def create_window(task='', stop_watch_active=False):
     size_combo = (int(size_window[0] * 0.8),)
+    button_text = start_time_text if not stop_watch_active else stop_time_text
     layout = [
         [sg.Text('TIME', key=stopwatch_text_key, font='arial 45', justification='center')],
-        [sg.Combo(get_tasks_list_selector(), default_value=task_name, key=input_task_key, font='arial 17', size=size_combo)],
-        [sg.Button(start_time_text, key=stopwatch_button_key), sg.Button('Exit')],
+        [sg.Combo(values=list(), default_value=task, key=input_task_key, font='arial 17', size=size_combo)],
+        [sg.Button(button_text, key=stopwatch_button_key), sg.Button('Exit')],
         [sg.Button('Minimize', key=minimize_button_key)]
     ]
     location = get_last_window_location(title_window)
@@ -38,10 +38,10 @@ def create_window(task_name=''):
                     element_justification="center")
     
 
-def create_minimized_window(task_name):
+def create_minimized_window(task):
     size_task_name = (size_minimized_window[0]//16, size_minimized_window[1])
     layout = [[
-            sg.Text(task_name, key=minimized_task_key, auto_size_text=True, justification='left', enable_events=True, size=size_task_name),
+            sg.Text(task, key=minimized_task_key, auto_size_text=True, justification='left', enable_events=True, size=size_task_name),
             sg.Push(), sg.Text("timer", key=stopwatch_text_key, auto_size_text=True, justification='right', enable_events=True)
     ]]
     location = get_last_window_location(minimized_title_window)
@@ -92,3 +92,6 @@ def start_text_stopwatch_button(window):
     
 def update_idle_text(window, idle_time):
     window[idle_text_key].update(create_idle_text(idle_time))
+
+def update_list_tasks(window, task_list):
+    window[input_task_key].update(values=task_list)

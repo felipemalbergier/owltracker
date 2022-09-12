@@ -2,14 +2,15 @@ import requests
 import yaml
 import time
 
+from owltracker.data.integrations.clickup.task_clickup import ClickupTask
+from owltracker.data.integrations.integration import Integration
 
 with open("config.json") as f:
     config = yaml.safe_load(f)
 
-class Clickup:
+class Clickup(Integration):
     BASE_URL = "https://api.clickup.com/api/v2/"
     WORKSPACE_ID = config['workspace_id']
-    TASK_INFORMATION = ['id', 'name', 'team_id', 'list']
 
     def __init__(self) -> None:
         self.headers = {
@@ -17,24 +18,16 @@ class Clickup:
             'Authorization': config['api_token']
         }
 
-    @staticmethod
-    def request_api(method, url, headers, params=None, payload=None):
-        response = requests.request(method, url, headers=headers, params=params, json=payload)
-        return response
-        
-
     def get_list_tasks(self) -> list[dict]:
         # TODO Implement grequests
-        params = {"statuses[0]": 'todo',
-                "statuses[1]": 'doing'}
+        params = {"statuses[0]": 'doing'}
         url = self.BASE_URL + f"/team/{self.WORKSPACE_ID}/task?"
         response = self.request_api("GET", url, self.headers, params=params)
         
         tasks = list()
         for task in response.json().get('tasks', {}):
-            task_to_return = {info: task[info] for info in self.TASK_INFORMATION}
-            task_to_return.update({'integration': "clickup"})
-            tasks.append(task_to_return)
+            processed_task = ClickupTask(original_data=task)
+            tasks.append(processed_task)
         return tasks
         
 
