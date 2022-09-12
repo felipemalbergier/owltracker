@@ -42,8 +42,6 @@ class Controller:
 
     def create_main_window(self):
         self.model.fetch_tasks_list_selector()
-        # list_tasks = [f"essa eh uma task bacana de bobo{i}" for i in range(9)]
-        # self.model.current_tasks = list_tasks
         window = create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
         return window
         
