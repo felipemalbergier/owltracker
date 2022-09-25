@@ -22,7 +22,12 @@ def add_used_task(task_name: str) -> None:
         set_entry_user_settings(tasks_list_settings, used_tasks_list)
         
 def get_last_window_location(window_title):
-    return get_entry_user_settings(last_location_settings_format.format(window_title), (None, None))
+    location = get_entry_user_settings(last_location_settings_format.format(window_title), (None, None))
+    screen_size = sg.Window.get_screen_size()
+    return location if location_in_screen_size(location, screen_size) else (None, None)
 
 def set_last_window_location(window_title, location):
     set_entry_user_settings(last_location_settings_format.format(window_title), location)
+
+def location_in_screen_size(location: tuple, screen_size: tuple) -> bool:
+    return  0 < location[0] < screen_size[0] - 10 and 0 < location[1] < screen_size[1] - 10
