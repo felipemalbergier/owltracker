@@ -3,7 +3,7 @@ from owltracker.data.integrations.task import Task
 from owltracker.data.model import Model
 from owltracker.ui.notification import Notification
 from owltracker.utils import time_to_formated_string
-from owltracker.idle import get_idle_time
+from owltracker.idle_time.idle import get_idle_time
 from owltracker.ui.layouts import input_task_key
 from owltracker.ui.layouts import start_text_stopwatch_button
 from owltracker.ui.layouts import stop_text_stopwatch_button
