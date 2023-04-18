@@ -12,4 +12,3 @@ elif "linux" in platform:
     get_idle_time = get_idle_linux
 else:
     raise NotImplementedError(f"Not implemented idle time for platform: {platform}")
-    
