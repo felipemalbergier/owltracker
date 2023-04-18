@@ -72,7 +72,7 @@ except OSError:
     # Logging?
     xss_available = False
 
-def get_idle_time():
+def get_idle_time_linux():
     global xss_available
     """
     Return the idle time in seconds
