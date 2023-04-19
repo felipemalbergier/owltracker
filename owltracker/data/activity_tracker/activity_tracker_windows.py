@@ -1,4 +1,6 @@
-import win32gui, win32process, psutil
+import win32gui
+import win32process
+import psutil
 
 def get_active_window_info_windows() -> dict:
     try:

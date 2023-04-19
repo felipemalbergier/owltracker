@@ -19,11 +19,12 @@ from owltracker.ui.layouts import idle_title_window
 from owltracker.ui.layouts import create_main_window
 from owltracker.ui.layouts import create_minimized_window
 from owltracker.ui.layouts import create_after_idle_window
-from owltracker.ui.notification import limit_idle_time_with_task
-from owltracker.ui.notification import limit_time_no_task_selected
-from owltracker.ui.notification import limit_time_with_task_selected
+from owltracker.ui.notification import LIMIT_IDLE_TIME_WITH_TASK
+from owltracker.ui.notification import LIMIT_TIME_NO_TASK_SELECTED
+from owltracker.ui.notification import LIMIT_TIME_WITH_TASK_SELECTED
 from owltracker.data.user_settings import set_last_window_location
 from owltracker.data.user_settings import add_used_task
+from owltracker.data.activity_tracker.activity_tracker import log_activity
 
 import PySimpleGUI as sg
 
@@ -87,7 +88,7 @@ class Controller:
             
             # Create idle window to verify idle time
             self.idle_time = get_idle_time()
-            if self.idle_time > limit_idle_time_with_task and self.stopwatch_active:
+            if self.idle_time > LIMIT_IDLE_TIME_WITH_TASK and self.stopwatch_active:
                 if window.Title != idle_title_window:
                     window.close()
                     window = create_after_idle_window()
@@ -106,11 +107,11 @@ class Controller:
                     self.model.current_task = LocalTask(input_value)
             
             # notify if not working on task for more than X seconds
-            if not self.stopwatch_active and time.time() - self.notification.task_notification_start_time > limit_time_no_task_selected:
+            if not self.stopwatch_active and time.time() - self.notification.task_notification_start_time > LIMIT_TIME_NO_TASK_SELECTED:
                 self.notification.notify_not_working_task()
             
             # notify if working on task for more than Y seconds
-            if self.stopwatch_active and time.time() - self.notification.task_notification_start_time > limit_time_with_task_selected:
+            if self.stopwatch_active and time.time() - self.notification.task_notification_start_time > LIMIT_TIME_WITH_TASK_SELECTED:
                 self.notification.notify_working_same_task(self.model.current_task.title)
             
             # Actions for idle screen
@@ -125,6 +126,8 @@ class Controller:
                 window = create_minimized_window(self.task_name)
                 self.notification.task_notification_start_time = time.time()
                 self.idle_time = 0
+
+            log_activity()
             print("idle", self.idle_time)
         window.close()
         

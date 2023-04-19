@@ -4,3 +4,4 @@ requests==2.28.1
 grequests==0.6.0
 PyYAML==6.0
 pypiwin32==223
+psutil==5.9.5

@@ -1,9 +1,9 @@
 from plyer import notification
 import time
 
-limit_idle_time_with_task = 15 * 60  # in seconds
-limit_time_no_task_selected = 15 * 60  # in seconds
-limit_time_with_task_selected = 30 * 60 # in seconds
+LIMIT_IDLE_TIME_WITH_TASK = 15 * 60  # in seconds
+LIMIT_TIME_NO_TASK_SELECTED = 15 * 60  # in seconds
+LIMIT_TIME_WITH_TASK_SELECTED = 30 * 60 # in seconds
 
 
 class Notification:
