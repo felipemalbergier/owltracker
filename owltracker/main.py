@@ -2,6 +2,7 @@ from owltracker.data.integrations.task import LocalTask
 from owltracker.data.integrations.task import Task
 from owltracker.data.model import Model
 from owltracker.ui.notification import Notification
+from owltracker.utils import WAIT_TIME_MSECONDS
 from owltracker.utils import time_to_formated_string
 from owltracker.idle_time.idle import get_idle_time
 from owltracker.ui.layouts import input_task_key
@@ -24,7 +25,7 @@ from owltracker.ui.notification import LIMIT_TIME_NO_TASK_SELECTED
 from owltracker.ui.notification import LIMIT_TIME_WITH_TASK_SELECTED
 from owltracker.data.user_settings import set_last_window_location
 from owltracker.data.user_settings import add_used_task
-from owltracker.data.activity_tracker.activity_tracker import log_activity
+from owltracker.data.activity_tracker.activity_tracker import Activity
 
 import PySimpleGUI as sg
 
@@ -35,10 +36,11 @@ class Controller:
     def __init__(self) -> None:
         self.notification = Notification()
         self.model = Model()
+        self.activity = Activity()
         self.stopwatch_active = False
         self.idle_start_time = 0
         self.start_time = 0
-        self.idle_time = 0       
+        self.idle_time = 0
 
     def create_main_window(self):
         self.model.fetch_tasks_list_selector()
@@ -48,7 +50,7 @@ class Controller:
     def run(self):
         window = self.create_main_window()
         while True:
-            event, values = window.read(timeout=100)
+            event, values = window.read(timeout=WAIT_TIME_MSECONDS)
             
             if event == sg.WIN_CLOSED or event == 'Exit':
                 break
@@ -127,7 +129,7 @@ class Controller:
                 self.notification.task_notification_start_time = time.time()
                 self.idle_time = 0
 
-            log_activity()
+            self.activity.log_activity()
             print("idle", self.idle_time)
         window.close()
         

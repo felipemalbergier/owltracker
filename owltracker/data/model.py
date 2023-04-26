@@ -1,7 +1,7 @@
 from asyncio import Task
 from datetime import datetime
 import os
-from owltracker.data.integrations.clickup.clickup import Clickup
+# from owltracker.data.integrations.clickup.clickup import Clickup
 from owltracker.data.user_settings import get_entry_user_settings, set_entry_user_settings, verify_in_user_settings
 from owltracker.ui.notification import Notification
 
@@ -13,7 +13,7 @@ class Model:
     TIMES_FILES = os.path.join(os.path.dirname(os.path.dirname(__file__)), "time_database.csv") 
     COLUMNS_TIME_FILES = ['Time Input', 'Task Name', 'Time Spent', "Integration", "Integration ID"]
     def __init__(self) -> None:
-        self.integrations = {"clickup": Clickup()}
+        self.integrations = {} #{"clickup": Clickup()}
         self.notification = Notification()
         self.current_tasks = list()
         self.current_task = None
