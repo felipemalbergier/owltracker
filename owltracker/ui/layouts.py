@@ -90,5 +90,5 @@ def stop_text_stopwatch_button(window):
 def start_text_stopwatch_button(window):
     change_text_stopwatch_button(window, start_time_text)
     
-def update_idle_text(window, idle_time):
-    window[idle_text_key].update(create_idle_text(idle_time))
+def update_idle_text(window, start_time_idle):
+    window[idle_text_key].update(create_idle_text(start_time_idle))
