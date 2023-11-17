@@ -18,4 +18,4 @@ class Activity:
     def log_activity(self):
         activity = self.get_active_window_info()
         self.db.add_activity(**activity)
-        print(self.db.select_query("Select * from activity;"))
+        # print(self.db.select_query("Select * from activity;"))
