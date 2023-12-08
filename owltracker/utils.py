@@ -1,4 +1,4 @@
-WAIT_TIME_MSECONDS = 300 #100
+WAIT_TIME_MSECONDS = 100
 
 def time_to_formated_string(time_time: float):
     hours = int(time_time / (60 * 60))

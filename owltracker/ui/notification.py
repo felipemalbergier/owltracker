@@ -5,7 +5,7 @@ class Notification:
     APP_NAME = "Owltracker"
     task_notification_start_time = time.time()
 
-    LIMIT_IDLE_TIME_WITH_TASK = 5 # 15 * 60  # in seconds
+    LIMIT_IDLE_TIME_WITH_TASK = 15 * 60  # in seconds
     LIMIT_TIME_NO_TASK_SELECTED = 15 * 60  # in seconds
     LIMIT_TIME_WITH_TASK_SELECTED = 30 * 60 # in seconds
 
