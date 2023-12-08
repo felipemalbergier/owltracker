@@ -63,11 +63,12 @@ class Controller:
                 continue # need to 'read' again to execute code
             
             # Click to go to main Window
-            if self.view.window.Title == self.view.minimized_title_window and event in [self.view.minimized_task_key, self.view.stopwatch_text_key]:
-                self.view.window.close()
-                self.view.create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
-                continue # need to 'read' again to execute code
-            
+            if self.view.window.Title == self.view.minimized_title_window:
+                if event == self.view.stopwatch_text_key:
+                    self.view.window.close()
+                    self.view.create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
+                    continue # need to 'read' again to execute code
+
             # Create idle window to verify idle time
             self.idle_time = get_idle_time()
             self.idle_start_time = time.time() - self.idle_time

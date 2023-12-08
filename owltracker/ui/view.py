@@ -51,8 +51,8 @@ class View:
     def create_minimized_window(self, task):
         size_task_name = (self.size_minimized_window[0]//16, self.size_minimized_window[1])
         layout = [[
-            sg.Text(task, key=self.minimized_task_key, auto_size_text=True, justification='left', enable_events=True, size=size_task_name),
-            sg.Push(), sg.Text("timer", key=self.stopwatch_text_key, auto_size_text=True, justification='right', enable_events=True)
+            sg.Text(task, key=self.minimized_task_key, auto_size_text=True, justification='left', size=size_task_name, tooltip=f" Task: {task}\nDrag to move window "),
+            sg.Push(), sg.Text("timer", key=self.stopwatch_text_key, auto_size_text=True, justification='right', enable_events=True, tooltip="Click to go to main window")
         ]]
         location = get_last_window_location(self.minimized_title_window)
         self.update_window(sg.Window(self.minimized_title_window, 
@@ -75,12 +75,6 @@ class View:
         ]
         location = get_last_window_location(self.minimized_title_window)
         self.update_window(sg.Window(self.idle_title_window, layout, size=(300, 200), location=location, element_justification="center", no_titlebar=True, grab_anywhere=True, alpha_channel=.6, keep_on_top=True, finalize=True))
-
-    # def create_last_window(self):
-    #     self.window.close()
-    #     self.last_window.reaper()
-    #     self.window, self.last_window = self.last_window, self.window
-
 
     def create_idle_text(self, idle_time):
         idle_time_string = f'{idle_time//60:.0f} minutes'
