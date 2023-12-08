@@ -1,14 +1,14 @@
 from plyer import notification
 import time
 
-LIMIT_IDLE_TIME_WITH_TASK = 15 * 60  # in seconds
-LIMIT_TIME_NO_TASK_SELECTED = 15 * 60  # in seconds
-LIMIT_TIME_WITH_TASK_SELECTED = 30 * 60 # in seconds
-
-
 class Notification:
     APP_NAME = "Owltracker"
     task_notification_start_time = time.time()
+
+    LIMIT_IDLE_TIME_WITH_TASK = 5 # 15 * 60  # in seconds
+    LIMIT_TIME_NO_TASK_SELECTED = 15 * 60  # in seconds
+    LIMIT_TIME_WITH_TASK_SELECTED = 30 * 60 # in seconds
+
     def __init__(self) -> None:
         pass
     
@@ -36,6 +36,7 @@ class Notification:
             message=f"Task name: {task_name}",
             app_name=self.APP_NAME,
             timeout=5)
+
     def notify_error_updated_time_integration(self, integration, task_name, response_text):
             notification.notify(
                 title=f"Could not update {integration} task time",

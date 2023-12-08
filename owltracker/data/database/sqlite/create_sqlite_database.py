@@ -1,7 +1,7 @@
 from sqlite_database import SQLiteDatabase
 
 
-def get_create_db_query(drop_tables=False):
+def get_query_create_activity_table(drop_tables=False):
 
     query = """
     CREATE TABLE IF NOT EXISTS activity (
@@ -19,11 +19,39 @@ def get_create_db_query(drop_tables=False):
 
     return query
 
+# need to create a task table
+def get_query_create_task_table(drop_tables=False):
+    query = """
+    CREATE TABLE IF NOT EXISTS task (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        source INTEGER,
+        ) ;
+    
+    """
+    if drop_tables:
+        query = "DROP TABLE IF EXISTS task;" + query
+
+    return query
+
+# create source table
+def get_query_create_task_source_table(drop_tables=False):
+    query = """
+    CREATE TABLE IF NOT EXISTS task_source (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        ) ;
+    
+    """
+    if drop_tables:
+        query = "DROP TABLE IF EXISTS source;" + query
+
+    return query
 
 if __name__ == "__main__":
-    query = get_create_db_query(True)
+    query = get_query_create_activity_table(True)
     sql = SQLiteDatabase()
     sql.excecute_script(query)
-    # sql.insert_query("INSERT INTO activity (process_name, window_title) VALUES ('hi', 'hiii')")
+    # sql.excecute_query("INSERT INTO activity (process_name, window_title) VALUES ('hi', 'hiii')", commit=True)
     # print(sql.select_query("select * from activity"))
     print("FINITO")
