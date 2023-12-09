@@ -47,7 +47,7 @@ class Controller:
                     self.stopwatch_active = False
                     time_spent = time.time() - self.start_time
                     print(f"Ran for {time_spent} seconds")
-                    self.model.save_time(self.model.current_task, time_spent)
+                    self.model.update_time_integration(time_spent)
                     self.view.start_text_stopwatch_button()
                     self.view.task_notification_start_time = time.time()
             

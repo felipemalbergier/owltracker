@@ -19,8 +19,7 @@ class Clickup(Integration):
         }
 
     def get_list_tasks(self) -> list[dict]:
-        # TODO Implement grequests
-        params = {"statuses[0]": 'doing'}
+        params = {"statuses[0]": 'this week', 'subtasks': True}
         url = self.BASE_URL + f"/team/{self.WORKSPACE_ID}/task?"
         response = self.request_api("GET", url, self.headers, params=params)
         
@@ -34,21 +33,26 @@ class Clickup(Integration):
     def update_time_task(self, task_id: str, task_time: float) -> requests.models.Response:
         url = f"https://api.clickup.com/api/v2/team/{self.WORKSPACE_ID}/time_entries/"
         payload={
-        "description": "from owltracker",
-        "tags": [
-            {
-            "name": "owltracker",
-            "tag_bg": "#BF55EC",
-            "tag_fg": "#FFFFFF"
-            }
-        ],
         "start": int(time.time() - task_time) * 1000,
         "duration": int(task_time * 1000),
         "tid": f"{task_id}"
+        }
+        response = self.request_api("POST", url, headers=self.headers, payload=payload)
+
+        comment_response = self.comment_task(task_id, f"Updated time via Owltracker")
+        # self.request_api("GET", url, headers=self.headers)
+        return response
+
+    def comment_task(self, task_id: str, comment: str) -> requests.models.Response:
+        url = f"https://api.clickup.com/api/v2/task/{task_id}/comment"
+        payload={
+            "comment_text": comment
         }
         response = self.request_api("POST", url, headers=self.headers, payload=payload)
         return response
 
 if __name__ == "__main__":
     clickup = Clickup()
-    tasks = clickup.get_list_tasks()
+    clickup.update_time_task("86939z5z1", 60)
+    # tasks = clickup.get_list_tasks()
+    a = 1
