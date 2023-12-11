@@ -24,11 +24,7 @@ class Controller:
         
         self.stopwatch_active = False
         self.idle_start_time = 0
-<<<<<<< HEAD
-        self.start_timer_time = 0
-=======
         self.start_time = 0
->>>>>>> feature/activity_tracker_windows
         self.idle_time = 0
 
     def run(self):
@@ -43,15 +39,9 @@ class Controller:
             if event == self.view.stopwatch_button_key:
                 if not self.stopwatch_active: # CLICK START TIMER
                     self.stopwatch_active = True
-<<<<<<< HEAD
-                    self.start_timer_time = time.time()
-                    stop_text_stopwatch_button(window)
-                    task_notification_start_time = time.time() # move to view
-=======
                     self.start_time = time.time()
                     self.view.stop_text_stopwatch_button()
                     self.view.task_notification_start_time = time.time()
->>>>>>> feature/activity_tracker_windows
                     # add_used_task(task_name) # TODO implement it
                 else:                    # CLiCK STOP TIMER
                     self.stopwatch_active = False
@@ -62,15 +52,9 @@ class Controller:
                     self.view.task_notification_start_time = time.time()
             
             # Update timer
-<<<<<<< HEAD
-            if event == '__TIMEOUT__' and self.stopwatch_active and window.Title != idle_title_window:
-                elapsed_time = time_to_formated_string(time.time() - self.start_timer_time) # to view
-                window[stopwatch_text_key].update(elapsed_time) # to view
-=======
             if event == '__TIMEOUT__' and self.stopwatch_active and self.view.window.Title != self.view.idle_title_window:
                 elapsed_time = time_to_formated_string(time.time() - self.start_time) # to view
                 self.view.window[self.view.stopwatch_text_key].update(elapsed_time) # to view
->>>>>>> feature/activity_tracker_windows
 
             # Click to Minimize window
             if event == self.view.minimize_button_key:
@@ -93,17 +77,10 @@ class Controller:
                     self.view.window.close()
                     self.view.create_after_idle_window()
                     continue # need to 'read' again to execute code
-<<<<<<< HEAD
-            if window.Title == idle_title_window:
-                update_idle_text(window, time.time() - self.idle_start_time)
-
-            set_last_window_location(window.Title, window.current_location())
-=======
                 else:
                     self.view.update_idle_text(time.time() - self.idle_start_time)
             
             set_last_window_location(self.view.window.Title, self.view.window.current_location())
->>>>>>> feature/activity_tracker_windows
             
             if self.view.input_task_key in values:
                 input_value = values[self.view.input_task_key]
@@ -121,17 +98,6 @@ class Controller:
                 self.notification.notify_working_same_task(self.model.current_task.title)
             
             # Actions for idle screen
-<<<<<<< HEAD
-            if event == ignore_time_key:
-                window.close()
-                window = create_minimized_window(self.model.current_task.title)
-                self.notification.task_notification_start_time = time.time()
-                self.idle_time = 0
-            if event == subtract_time_key:
-                self.start_timer_time += time.time() - self.idle_start_time
-                window.close()
-                window = create_minimized_window(self.model.current_task.title)
-=======
             if event == self.view.consider_idle_time:
                 self.view.create_minimized_window(task=self.model.current_task)
                 self.notification.task_notification_start_time = time.time()
@@ -139,7 +105,6 @@ class Controller:
             if event == self.view.remove_idle_time:
                 self.start_time += time.time() - self.idle_start_time
                 self.view.create_minimized_window(task=self.model.current_task)
->>>>>>> feature/activity_tracker_windows
                 self.notification.task_notification_start_time = time.time()
                 self.idle_time = 0
 

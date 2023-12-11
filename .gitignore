@@ -131,11 +131,6 @@ dmypy.json
 config.json
 config.yaml
 *.csv
-<<<<<<< HEAD
 
 *.db
 .idea/
-=======
-.idea
-*.db
->>>>>>> feature/activity_tracker_windows
