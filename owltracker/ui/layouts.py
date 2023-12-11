@@ -52,7 +52,8 @@ def create_minimized_window(task):
                     no_titlebar=True, 
                     grab_anywhere=True,
                     location=location,
-                    alpha_channel=.6)
+                    alpha_channel=.6,
+                    keep_on_top=True)
 
 
     

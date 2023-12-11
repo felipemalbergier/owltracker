@@ -6,7 +6,7 @@ from dataclasses import field
 class Task(ABC):
     id: str
     title: str
-    integration: str
+    source: str
     original_data: dict = field(repr=False, default_factory=dict)
         
     @abstractmethod
@@ -17,13 +17,13 @@ class Task(ABC):
         return self.title
 
     def __repr__(self) -> str:
-        return f"{self.integration} task | Title: {self.title}"
+        return f"{self.source} task | Title: {self.title}"
 
 @dataclass
 class LocalTask(Task):
     def __init__(self, task_title) -> None:
         self.title = task_title
-        self.integration = ""
+        self.source = ""
         self.id = ""
 
 

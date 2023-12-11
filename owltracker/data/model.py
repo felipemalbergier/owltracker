@@ -10,42 +10,30 @@ tasks_list_settings = 'tasks_list'
 
 
 class Model:
-    TIMES_FILES = os.path.join(os.path.dirname(os.path.dirname(__file__)), "time_database.csv") 
-    COLUMNS_TIME_FILES = ['Time Input', 'Task Name', 'Time Spent', "Integration", "Integration ID"]
     def __init__(self) -> None:
-        self.integrations = {"clickup": Clickup()}
+        self.task_sources = {"clickup": Clickup()}
         self.notification = Notification()
-        self.current_tasks = list()
+        self._current_tasks = list()
         self.current_task = None
 
-    def fetch_tasks_list_selector(self) -> None:        
+    @property
+    def current_tasks(self):
+        self.fetch_tasks_list_selector()
+        return self._current_tasks
+
+    def fetch_tasks_list_selector(self) -> None:
         integrations_tasks = list()
-        for integration in self.integrations.values():
+        for integration in self.task_sources.values():
             integration_tasks = integration.get_list_tasks()
             integrations_tasks += integration_tasks
                     
         manually_added_tasks = get_entry_user_settings(tasks_list_settings, list())
-        self.current_tasks = manually_added_tasks + integrations_tasks
+        self._current_tasks = manually_added_tasks + integrations_tasks
 
-    def update_time_integration(self, task: Task, task_time: str):
-        if task.integration:
-            r = self.integrations[task.integration].update_time_task(task.id, task_time)
+    def update_time_integration(self, task_time: float):
+        if self.current_task.source:
+            r = self.task_sources[self.current_task.source].update_time_task(self.current_task.id, task_time)
             if r.ok:
-                self.notification.notify_updated_time_integration(task.integration, task)
+                self.notification.notify_updated_time_integration(self.current_task.source, self.current_task)
             else:
-                self.notification.notify_error_updated_time_integration(task.integration, task, r.text)
-    
-    def save_time(self, task: Task, time: int):
-        # Add columns headers
-        if not os.path.exists(self.TIMES_FILES):
-            with open(self.TIMES_FILES, 'w') as f:
-                f.write(";".join(self.COLUMNS_TIME_FILES))
-                f.write("\n")
-
-        # Add content
-        now = datetime.now().isoformat()
-        with open(self.TIMES_FILES, 'a') as f:
-            f.write(";".join([now, task.title, f"{time:.0f}", task.integration, task.id]))
-            f.write("\n")
-        
-        self.update_time_integration(task, time)
+                self.notification.notify_error_updated_time_integration(self.current_task.source, self.current_task, r.text)
