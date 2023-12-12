@@ -1,10 +1,11 @@
 from tkinter.tix import TList
 from plyer import notification
 import time
+import os
 
 class Notification:
     APP_NAME = "Owltracker"
-    ICON_PATH = "brain.ico"
+    ICON_PATH = os.path.join("files", "logo.ico") # referenced from workspace folder
     task_notification_start_time = time.time()
 
     LIMIT_IDLE_TIME_WITH_TASK = 15 * 60  # in seconds
