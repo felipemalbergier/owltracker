@@ -45,7 +45,7 @@ class Controller:
                     # add_used_task(task_name) # TODO implement it
                 else:                    # CLiCK STOP TIMER
                     self.stopwatch_active = False
-                    time_spent = time.time() - self.start_time
+                    time_spent = time.time() - self.start_timer_time
                     print(f"Ran for {time_spent} seconds")
                     self.model.update_time_integration(time_spent)
                     self.view.start_text_stopwatch_button()
