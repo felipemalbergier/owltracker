@@ -1,17 +1,17 @@
 from tkinter.tix import TList
 from plyer import notification
 import time
-
-limit_idle_time_with_task = 15 * 60  # in seconds
-limit_time_no_task_selected = 15 * 60  # in seconds
-limit_time_with_task_selected = 30 * 60 # in seconds
-
+import os
 
 class Notification:
     APP_NAME = "Owltracker"
-    ICON_PATH = "brain.ico"
+    ICON_PATH = os.path.join("files", "logo.ico") # referenced from workspace folder
     task_notification_start_time = time.time()
-    
+
+    LIMIT_IDLE_TIME_WITH_TASK = 15 * 60  # in seconds
+    LIMIT_TIME_NO_TASK_SELECTED = 15 * 60  # in seconds
+    LIMIT_TIME_WITH_TASK_SELECTED = 30 * 60 # in seconds
+
     def __init__(self) -> None:
         pass
     
@@ -45,7 +45,7 @@ class Notification:
         message=f"Task name: {task_name}"
         timeout=5
         self._send_notification(title, message, timeout)
-        
+
     def notify_error_updated_time_integration(self, integration, task_name, response_text):
         title=f"Could not update {integration} task time"
         message=f"Task name: {task_name}. Response: {response_text}"
