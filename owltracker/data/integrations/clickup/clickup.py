@@ -55,4 +55,3 @@ if __name__ == "__main__":
     clickup = Clickup()
     clickup.update_time_task("86939z5z1", 60)
     # tasks = clickup.get_list_tasks()
-    a = 1
