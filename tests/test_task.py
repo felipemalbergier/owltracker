@@ -1,5 +1,5 @@
 import unittest
-from owltracker.data.integrations.task import LocalTask, Task
+from owltracker.data.integrations.task import LocalTask
 
 class TestLocalTask(unittest.TestCase):
     def test_local_task(self):
