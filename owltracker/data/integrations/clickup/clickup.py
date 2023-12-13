@@ -1,21 +1,23 @@
 import requests
-import yaml
 import time
+import os
 
 from owltracker.data.integrations.clickup.task_clickup import ClickupTask
 from owltracker.data.integrations.integration import Integration
 
-with open("config.json") as f:
-    config = yaml.safe_load(f)
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 class Clickup(Integration):
     BASE_URL = "https://api.clickup.com/api/v2/"
-    WORKSPACE_ID = config['workspace_id']
+    WORKSPACE_ID = os.getenv('workspace_id')
 
     def __init__(self) -> None:
         self.headers = {
             'Content-Type': 'application/json',
-            'Authorization': config['api_token']
+            'Authorization': os.getenv('api_token')
         }
 
     def get_list_tasks(self) -> list[dict]:
@@ -53,5 +55,5 @@ class Clickup(Integration):
 
 if __name__ == "__main__":
     clickup = Clickup()
-    clickup.update_time_task("86939z5z1", 60)
-    # tasks = clickup.get_list_tasks()
+    # clickup.update_time_task("86939z5z1", 60)
+    tasks = clickup.get_list_tasks()

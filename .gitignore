@@ -131,5 +131,6 @@ dmypy.json
 config.json
 config.yaml
 *.csv
-.idea
+
 *.db
+.idea/
