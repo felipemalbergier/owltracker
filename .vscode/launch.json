@@ -12,7 +12,7 @@
     "justMyCode": true,
     "cwd": "${workspaceFolder}",
     "env": {
-    "PYTHONPATH": "${workspaceFolder}/"
+        "PYTHONPATH": "${workspaceFolder}/"
     }
     },
     {
@@ -25,7 +25,7 @@
     // "python": "/home/felipe/projects/side_quest/Taatika/",
     // "python.pythonPath": "${config.python.pythonPath}",
     "env": {
-    "PYTHONPATH": "${workspaceFolder}/"
+        "PYTHONPATH": "${workspaceFolder}/"
     }
     }
 ]}
