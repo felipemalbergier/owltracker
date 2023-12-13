@@ -23,8 +23,8 @@ class Task(ABC):
 class LocalTask(Task):
     def __init__(self, task_title) -> None:
         self.title = task_title
-        self.source = ""
-        self.id = ""
+        self.source = None
+        self.id = None
 
 
 if __name__ == "__main__":
