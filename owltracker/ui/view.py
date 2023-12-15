@@ -124,3 +124,5 @@ class View:
     def clicked_remove_idle_time(self, event) -> bool:
         return event == self.remove_idle_time
     
+    def clicked_close(self, event) -> bool:
+        return event == sg.WIN_CLOSED or event == 'Exit'

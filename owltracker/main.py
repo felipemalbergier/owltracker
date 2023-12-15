@@ -9,8 +9,6 @@ from owltracker.data.user_settings import set_last_window_location
 from owltracker.data.user_settings import add_used_task
 from owltracker.data.activity_tracker.activity_tracker import Activity
 
-import PySimpleGUI as sg
-
 import time
 from datetime import datetime
 
@@ -93,7 +91,7 @@ class Controller:
         self.view.create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
         while True:
             event, values = self.view.window.read(timeout=WAIT_TIME_MSECONDS)
-            if event == sg.WIN_CLOSED or event == 'Exit':
+            if self.view.clicked_close(event):
                 break
             print(event, values)
             self.handle_stopwatch_event(event)
