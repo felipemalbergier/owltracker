@@ -1,5 +1,7 @@
+import time
 import PySimpleGUI as sg
 from owltracker.data.user_settings import get_last_window_location
+from owltracker.utils import time_to_formated_string
 
 class View:
     input_task_key = '-INPUT_TASK-'
@@ -10,11 +12,12 @@ class View:
     consider_idle_time = '-IGNORE_TIME_KEY-'
     remove_idle_time = "-SUBTRACT_TIME_KEY-"
     idle_text_key = '-IDLE_TEXT_KEY-'
+    
+    minimized_title_window = 'minimized'
+    idle_title_window = 'idle'
 
     def __init__(self):
         self.title_window = "Owltimer"
-        self.minimized_title_window = 'minimized'
-        self.idle_title_window = 'idle'
         self.size_minimized_window = (170,35)
         self.size_window = (300,300)
         self.start_time_text = 'Start Timer'
@@ -93,3 +96,31 @@ class View:
     def update_idle_text(self, idle_time):
         self.window[self.idle_text_key].update(self.create_idle_text(idle_time))
 
+    def clicked_stop_watch_button(self, event) -> bool:
+        return event == self.stopwatch_button_key
+    
+    def update_timer(self, start_time):
+        elapsed_time = time_to_formated_string(time.time() - start_time)
+        self.window[self.stopwatch_text_key].update(elapsed_time)
+    
+    def is_window_idle(self):
+        return self.window.Title == self.idle_title_window
+
+    def clicked_minimize_button(self, event) -> bool:
+        return event == self.minimize_button_key
+    
+    def minimize_window(self):
+        self.create_minimized_window(task=self.model.current_task)
+
+    def is_minimized_window(self) -> bool:
+        return self.window.Title == self.minimized_title_window
+    
+    def cliked_go_to_main_window(self, event) -> bool:
+        return event == self.stopwatch_text_key # to go to main window click on timer
+
+    def clicked_consider_idle_time(self, event) -> bool:
+        return event == self.consider_idle_time
+    
+    def clicked_remove_idle_time(self, event) -> bool:
+        return event == self.remove_idle_time
+    
