@@ -77,5 +77,51 @@ class TestController(unittest.TestCase):
         # Check that the create_after_idle_window method was called
         self.controller.view.create_after_idle_window.assert_called_once()
 
+    @patch('owltracker.ui.view.View.update_idle_text')
+    def test_update_idle_text(self, mock_update_idle_text):
+        self.controller.view.window = Mock()
+        self.controller.view.window.Title = View.idle_title_window
+
+        # Set idle_start_time to 0
+        self.controller.idle_start_time = 0
+
+        # Call the method
+        self.controller.update_idle_text()
+
+        # Check that the update_idle_text method was called
+        self.controller.view.update_idle_text.assert_called_once()
+
+    # simulate clicked_remove_idle_time
+    @patch('owltracker.main.time.time')
+    def test_handle_remove_idle_time(self, time_mock):
+        time_mock_value = 100
+        start_time = 10
+        idle_start_time = 75
+
+        time_mock.return_value = time_mock_value
+        self.controller.start_time = start_time
+        self.controller.idle_start_time = idle_start_time
+
+        # Call the method with a 'remove_idle_time' event
+        self.controller.handle_idle_screen_actions(View.remove_idle_time)
+
+        # Check that the idle_time was set to 0
+        self.assertEqual(self.controller.start_time, start_time + time_mock_value - idle_start_time)
+    
+    # simulate clicked_consider_idle_time
+    def test_handle_consider_idle_time(self):
+        start_time = 10
+        self.controller.start_time = start_time
+        self.controller.idle_start_time = 50
+
+        # Call the method with a 'consider_idle_time' event
+        self.controller.handle_idle_screen_actions(View.consider_idle_time)
+
+        # Check that the idle_time was set to 0
+        self.assertEqual(self.controller.start_time, start_time)
+
+
+        
+
 if __name__ == '__main__':
     unittest.main()
