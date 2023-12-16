@@ -55,10 +55,10 @@ class Controller:
             self.view.create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
 
     def handle_task_input(self, values):
-        if self.view.input_task_key in values:
-            input_value = values[self.view.input_task_key]
+        if self.view.has_task_input(values):
+            input_value = self.view.get_task_input(values)
             if isinstance(input_value, Task):
-                self.model.current_task = values[self.view.input_task_key]
+                self.model.current_task = input_value
             else:
                 self.model.current_task = LocalTask(input_value)
 

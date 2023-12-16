@@ -126,3 +126,10 @@ class View:
     
     def clicked_close(self, event) -> bool:
         return event == sg.WIN_CLOSED or event == 'Exit'
+    
+    def has_task_input(self, values) -> bool:
+        return self.input_task_key in values
+
+    def get_task_input(self, values):
+        return values[self.input_task_key]
+    
