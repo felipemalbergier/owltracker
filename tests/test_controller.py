@@ -1,10 +1,13 @@
 import unittest
-from unittest.mock import Mock, patch
-from owltracker.main import Controller
+from unittest.mock import Mock, MagicMock, patch
 from owltracker.ui.view import View
 
 class TestController(unittest.TestCase):
-    def setUp(self):
+    
+    @patch('owltracker.ui.view.View.update_window', new_callable=MagicMock)
+    @patch('owltracker.data.activity_tracker.activity_tracker.Activity')
+    def setUp(self, mock_update_window, mock_activity):
+        from owltracker.main import Controller
         self.controller = Controller()
 
     @patch('owltracker.main.Controller.start_stopwatch')
@@ -79,11 +82,8 @@ class TestController(unittest.TestCase):
 
     @patch('owltracker.ui.view.View.update_idle_text')
     def test_update_idle_text(self, mock_update_idle_text):
-        self.controller.view.window = Mock()
+        self.controller.view.window = MagicMock()
         self.controller.view.window.Title = View.idle_title_window
-
-        # Set idle_start_time to 0
-        self.controller.idle_start_time = 0
 
         # Call the method
         self.controller.update_idle_text()
@@ -94,8 +94,6 @@ class TestController(unittest.TestCase):
     @patch('owltracker.ui.view.View.create_minimized_window')
     @patch('owltracker.main.time.time')
     def test_handle_remove_idle_time(self, time_mock, mock_create_minimized_window):
-        # self.controller.view.update_window.return_value = Mock() # cant make it mock
-        
         time_mock_value = 100
         start_time = 10
         idle_start_time = 75
