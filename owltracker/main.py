@@ -6,11 +6,11 @@ from owltracker.ui.view import View
 from owltracker.utils import WAIT_TIME_MSECONDS
 from owltracker.idle_time.idle import get_idle_time
 from owltracker.data.user_settings import set_last_window_location
-from owltracker.data.user_settings import add_used_task
 from owltracker.data.activity_tracker.activity_tracker import Activity
 
 import time
 from datetime import datetime
+
 
 class Controller:
     def __init__(self) -> None:
@@ -18,7 +18,7 @@ class Controller:
         self.model = Model()
         self.activity = Activity()
         self.view = View()
-        
+
         self.stopwatch_active = False
         self.idle_start_time = 0
         self.start_time = 0
@@ -30,7 +30,7 @@ class Controller:
         self.view.stop_text_stopwatch_button()
         self.view.task_notification_start_time = time.time()
         # add_used_task(task_name) # TODO implement it
-        
+
     def stop_stopwatch(self):
         self.stopwatch_active = False
         time_spent = time.time() - self.start_time
@@ -38,12 +38,12 @@ class Controller:
         self.model.update_time_integration(time_spent)
         self.view.start_text_stopwatch_button()
         self.view.task_notification_start_time = time.time()
-    
+
     def handle_stopwatch_event(self, event):
         if self.view.clicked_stop_watch_button(event):
-            if not self.stopwatch_active: # CLICK START TIMER
+            if not self.stopwatch_active:  # CLICK START TIMER
                 self.start_stopwatch()
-            else:                         # CLiCK STOP TIMER
+            else:  # CLiCK STOP TIMER
                 self.stop_stopwatch()
 
     def handle_minimize_event(self, event):
@@ -86,7 +86,6 @@ class Controller:
             if self.view.clicked_remove_idle_time(event):
                 self.start_time += time.time() - self.idle_start_time
 
-
     def run(self):
         self.view.create_main_window(self.model.current_task, self.model.current_tasks, self.stopwatch_active)
         while True:
@@ -99,14 +98,14 @@ class Controller:
                 self.view.update_timer(self.start_time)
             self.handle_minimize_event(event)
             self.handle_main_window_event(event)
-            
+
             self.idle_time = get_idle_time()
-            
+
             if self.idle_time < 1 and not self.view.is_window_idle():
                 self.idle_start_time = time.time() - self.idle_time
             if self.handle_idle_window_creation():
                 continue  # need to 'read' again to refresh the window
-            
+
             self.update_idle_text()
             set_last_window_location(self.view.window.Title, self.view.window.current_location())
             self.handle_task_input(values)
@@ -116,8 +115,8 @@ class Controller:
                 self.activity.log_activity(event=event)
             print(datetime.now(), "idle", self.idle_time)
         self.view.window.close()
-        
-        
+
+
 if __name__ == "__main__":
     controller = Controller()
     controller.run()
