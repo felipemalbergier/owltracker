@@ -24,20 +24,19 @@ class Clickup(Integration):
         params = {"statuses[0]": 'this week', 'subtasks': True}
         url = self.BASE_URL + f"/team/{self.WORKSPACE_ID}/task?"
         response = self.request_api("GET", url, self.headers, params=params)
-        
+
         tasks = list()
         for task in response.json().get('tasks', {}):
             processed_task = ClickupTask(original_data=task)
             tasks.append(processed_task)
         return tasks
-        
 
     def update_time_task(self, task_id: str, task_time: float) -> requests.models.Response:
         url = f"https://api.clickup.com/api/v2/team/{self.WORKSPACE_ID}/time_entries/"
-        payload={
-        "start": int(time.time() - task_time) * 1000,
-        "duration": int(task_time * 1000),
-        "tid": f"{task_id}"
+        payload = {
+            "start": int(time.time() - task_time) * 1000,
+            "duration": int(task_time * 1000),
+            "tid": f"{task_id}"
         }
         response = self.request_api("POST", url, headers=self.headers, payload=payload)
 
@@ -47,11 +46,12 @@ class Clickup(Integration):
 
     def comment_task(self, task_id: str, comment: str) -> requests.models.Response:
         url = f"https://api.clickup.com/api/v2/task/{task_id}/comment"
-        payload={
+        payload = {
             "comment_text": comment
         }
         response = self.request_api("POST", url, headers=self.headers, payload=payload)
         return response
+
 
 if __name__ == "__main__":
     clickup = Clickup()

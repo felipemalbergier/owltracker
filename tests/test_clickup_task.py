@@ -14,5 +14,6 @@ class TestClickupTask(unittest.TestCase):
         self.assertEqual(self.task.source, 'clickup')
         self.assertEqual(self.task.original_data, self.task_data)
 
+
 if __name__ == '__main__':
     unittest.main()

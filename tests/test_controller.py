@@ -2,8 +2,9 @@ import unittest
 from unittest.mock import Mock, MagicMock, patch
 from owltracker.ui.view import View
 
+
 class TestController(unittest.TestCase):
-    
+
     @patch('owltracker.ui.view.View.update_window', new_callable=MagicMock)
     @patch('owltracker.data.activity_tracker.activity_tracker.Activity')
     def setUp(self, mock_update_window, mock_activity):
@@ -58,7 +59,7 @@ class TestController(unittest.TestCase):
 
         # Check that the create_main_window method was called
         self.controller.view.create_main_window.assert_called_once()
-    
+
     @patch('owltracker.ui.view.View.create_after_idle_window')
     def test_handle_idle_window_creation(self, mock_create_after_idle_window):
         self.controller.view.window = Mock()
@@ -107,7 +108,7 @@ class TestController(unittest.TestCase):
 
         # Check that the idle_time was set to 0
         self.assertEqual(self.controller.start_time, start_time + time_mock_value - idle_start_time)
-    
+
     # simulate clicked_consider_idle_time
     @patch('owltracker.ui.view.View.create_minimized_window')
     def test_handle_consider_idle_time(self, mock_create_minimized_window):
@@ -121,8 +122,6 @@ class TestController(unittest.TestCase):
         # Check that the idle_time was set to 0
         self.assertEqual(self.controller.start_time, start_time)
 
-
-        
 
 if __name__ == '__main__':
     unittest.main()
