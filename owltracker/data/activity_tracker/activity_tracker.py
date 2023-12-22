@@ -18,11 +18,10 @@ class Activity:
             self.get_active_window_info = get_active_window_info_windows
         else:
             raise NotImplementedError(f"Not implemented idle time for platform: {platform}")
-        
-    
+
     def get_active_window_info(self):
         raise NotImplementedError("Should be replaced on __init__")
-    
+
     def log_activity(self, task=None, event=None):
         activity = self.get_active_window_info()
         if not activity:
@@ -33,19 +32,20 @@ class Activity:
         # self.db.add_activity(**activity)
         # print(self.db.select_query("Select * from activity;"))
         now = datetime.now(timezone.utc)
-        
-         # If last process name is the same - I update end datetime (verify task when implemented)
-        if (self.last_activity.get('process_name') == activity.get('process_name', '') and 
-            self.last_activity.get('window_title') == activity.get('window_title', '')):
+
+        # If last process name is the same - I update end datetime (verify task when implemented)
+        if (self.last_activity.get('process_name') == activity.get('process_name', '') and
+                self.last_activity.get('window_title') == activity.get('window_title', '')):
 
             end = now + timedelta(milliseconds=WAIT_TIME_MSECONDS)
             self.db.update_end_activity(end)
 
         else:  # (else) if last process name is null or different I add start datetime and end datetime
             if event != View.remove_idle_time:
-                self.db.update_end_activity(now) # this is here so we only update it when we are not idle. This also contemplates when we subtract idle time
+                # this is here so we only update when not idle. This also contemplates subtracting idle time
+                self.db.update_end_activity(now)
             activity['start'] = now
             activity['end'] = now + timedelta(milliseconds=WAIT_TIME_MSECONDS)
             self.db.add_new_activity(activity)
-            
+
         self.last_activity = activity

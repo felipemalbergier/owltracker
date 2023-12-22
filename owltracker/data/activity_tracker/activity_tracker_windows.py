@@ -2,6 +2,7 @@ import win32gui
 import win32process
 import psutil
 
+
 def get_active_window_info_windows() -> dict:
     try:
         foreground_window = win32gui.GetForegroundWindow()
@@ -12,4 +13,3 @@ def get_active_window_info_windows() -> dict:
     except:
         # TODO add logger
         pass
-

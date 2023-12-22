@@ -1,8 +1,8 @@
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
-# from owltracker.data.integrations.clickup.clickup import Clickup        
 from owltracker.data.integrations.clickup.clickup import Clickup
+
 
 class TestClickup(unittest.TestCase):
 
@@ -10,7 +10,7 @@ class TestClickup(unittest.TestCase):
     def test_get_list_tasks(self, mock_request):
         mock_request.return_value.ok = True
         mock_request.return_value.json.return_value = {"tasks": [{"id": 1, "name": "Test Task"}]}
-        
+
         clickup = Clickup()
         tasks = clickup.get_list_tasks()
         self.assertEqual(len(tasks), 1)

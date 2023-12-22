@@ -1,8 +1,5 @@
-from asyncio import Task
-from datetime import datetime
-import os
 from owltracker.data.integrations.clickup.clickup import Clickup
-from owltracker.data.user_settings import get_entry_user_settings, set_entry_user_settings, verify_in_user_settings
+from owltracker.data.user_settings import get_entry_user_settings
 from owltracker.ui.notification import Notification
 
 last_location_settings_format = '-LAST_LOCATION_{}-'
@@ -26,7 +23,7 @@ class Model:
         for integration in self.task_sources.values():
             integration_tasks = integration.get_list_tasks()
             integrations_tasks += integration_tasks
-                    
+
         manually_added_tasks = get_entry_user_settings(tasks_list_settings, list())
         self._current_tasks = manually_added_tasks + integrations_tasks
 
@@ -36,4 +33,5 @@ class Model:
             if r.ok:
                 self.notification.notify_updated_time_integration(self.current_task.source, self.current_task)
             else:
-                self.notification.notify_error_updated_time_integration(self.current_task.source, self.current_task, r.text)
+                self.notification.notify_error_updated_time_integration(self.current_task.source, self.current_task,
+                                                                        r.text)

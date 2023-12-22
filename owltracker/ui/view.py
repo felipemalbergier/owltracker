@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 from owltracker.data.user_settings import get_last_window_location
 from owltracker.utils import time_to_formated_string
 
+
 class View:
     input_task_key = '-INPUT_TASK-'
     stopwatch_button_key = '-STOPWATCH_BUTTON-'
@@ -12,14 +13,14 @@ class View:
     consider_idle_time = '-IGNORE_TIME_KEY-'
     remove_idle_time = "-SUBTRACT_TIME_KEY-"
     idle_text_key = '-IDLE_TEXT_KEY-'
-    
+
     minimized_title_window = 'minimized'
     idle_title_window = 'idle'
 
     def __init__(self):
         self.title_window = "Owltimer"
-        self.size_minimized_window = (170,35)
-        self.size_window = (300,300)
+        self.size_minimized_window = (170, 35)
+        self.size_window = (300, 300)
         self.start_time_text = 'Start Timer'
         self.stop_time_text = 'Stop'
         self.last_window = None
@@ -44,26 +45,28 @@ class View:
             [sg.Button('Minimize', key=self.minimize_button_key)]
         ]
         location = get_last_window_location(self.title_window)
-        self.update_window(sg.Window(self.title_window, 
-                                     layout, 
-                                     size=self.size_window, 
-                                     location=location, 
+        self.update_window(sg.Window(self.title_window,
+                                     layout,
+                                     size=self.size_window,
+                                     location=location,
                                      element_justification="center",
                                      finalize=True))
 
     def create_minimized_window(self, task):
-        size_task_name = (self.size_minimized_window[0]//16, self.size_minimized_window[1])
+        size_task_name = (self.size_minimized_window[0] // 16, self.size_minimized_window[1])
         layout = [[
-            sg.Text(task, key=self.minimized_task_key, auto_size_text=True, justification='left', size=size_task_name, tooltip=f" Task: {task}\nDrag to move window "),
-            sg.Push(), sg.Text("timer", key=self.stopwatch_text_key, auto_size_text=True, justification='right', enable_events=True, tooltip="Click to go to main window")
+            sg.Text(task, key=self.minimized_task_key, auto_size_text=True, justification='left', size=size_task_name,
+                    tooltip=f" Task: {task}\nDrag to move window "),
+            sg.Push(), sg.Text("timer", key=self.stopwatch_text_key, auto_size_text=True, justification='right',
+                               enable_events=True, tooltip="Click to go to main window")
         ]]
         location = get_last_window_location(self.minimized_title_window)
-        self.update_window(sg.Window(self.minimized_title_window, 
-                                     layout, 
-                                     size=self.size_minimized_window, 
-                                     element_justification="center", 
-                                     no_titlebar=True, 
-                                     grab_anywhere=True, 
+        self.update_window(sg.Window(self.minimized_title_window,
+                                     layout,
+                                     size=self.size_minimized_window,
+                                     element_justification="center",
+                                     no_titlebar=True,
+                                     grab_anywhere=True,
                                      location=location,
                                      alpha_channel=.7,
                                      keep_on_top=True,
@@ -71,56 +74,67 @@ class View:
 
     def create_after_idle_window(self, idle_time=1):
         idle_text = self.create_idle_text(idle_time)
-        layout = [[sg.Text(idle_text, key=self.idle_text_key, font="arial 15", justification='center', enable_events=True)],
-                [sg.VPush()],
-                [sg.Button("Remove idle time", key=self.remove_idle_time),
-                sg.Button("Consider idle time", key=self.consider_idle_time)]
-        ]
+        layout = [
+            [sg.Text(idle_text, key=self.idle_text_key, font="arial 15", justification='center', enable_events=True)],
+            [sg.VPush()],
+            [sg.Button("Remove idle time", key=self.remove_idle_time),
+             sg.Button("Consider idle time", key=self.consider_idle_time)]
+            ]
         location = get_last_window_location(self.minimized_title_window)
-        self.update_window(sg.Window(self.idle_title_window, layout, size=(300, 200), location=location, element_justification="center", no_titlebar=True, grab_anywhere=True, alpha_channel=.6, keep_on_top=True, finalize=True))
+        self.update_window(sg.Window(self.idle_title_window, layout, size=(300, 200), location=location,
+                                     element_justification="center", no_titlebar=True, grab_anywhere=True,
+                                     alpha_channel=.6, keep_on_top=True, finalize=True))
 
     def create_idle_text(self, idle_time):
-        idle_time_string = f'{idle_time//60:.0f} minutes'
+        idle_time_string = f'{idle_time // 60:.0f} minutes'
         idle_text = f"You were idle for\n{idle_time_string}\nWhat do you want to do?"
         return idle_text
 
     def change_text_stopwatch_button(self, text):
         self.window[self.stopwatch_button_key].update(text)
-        
+
     def stop_text_stopwatch_button(self):
         self.change_text_stopwatch_button(self.stop_time_text)
-        
+
     def start_text_stopwatch_button(self):
         self.change_text_stopwatch_button(self.start_time_text)
-        
+
     def update_idle_text(self, idle_time):
         self.window[self.idle_text_key].update(self.create_idle_text(idle_time))
 
     def clicked_stop_watch_button(self, event) -> bool:
         return event == self.stopwatch_button_key
-    
+
     def update_timer(self, start_time):
         elapsed_time = time_to_formated_string(time.time() - start_time)
         self.window[self.stopwatch_text_key].update(elapsed_time)
-    
+
     def is_window_idle(self):
         return self.window.Title == self.idle_title_window
 
     def clicked_minimize_button(self, event) -> bool:
         return event == self.minimize_button_key
-    
+
     def minimize_window(self):
         self.create_minimized_window(task=self.model.current_task)
 
     def is_minimized_window(self) -> bool:
         return self.window.Title == self.minimized_title_window
-    
+
     def cliked_go_to_main_window(self, event) -> bool:
-        return event == self.stopwatch_text_key # to go to main window click on timer
+        return event == self.stopwatch_text_key  # to go to main window click on timer
 
     def clicked_consider_idle_time(self, event) -> bool:
         return event == self.consider_idle_time
-    
+
     def clicked_remove_idle_time(self, event) -> bool:
         return event == self.remove_idle_time
-    
+
+    def clicked_close(self, event) -> bool:
+        return event == sg.WIN_CLOSED or event == 'Exit'
+
+    def has_task_input(self, values) -> bool:
+        return self.input_task_key in values
+
+    def get_task_input(self, values):
+        return values[self.input_task_key]
