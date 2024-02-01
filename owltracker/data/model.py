@@ -1,10 +1,9 @@
 from owltracker.data.integrations.clickup.clickup import Clickup
+from owltracker.data.integrations.task import LocalTask
 from owltracker.data.user_settings import get_entry_user_settings
 from owltracker.ui.notification import Notification
-
-last_location_settings_format = '-LAST_LOCATION_{}-'
-tasks_list_settings = 'tasks_list'
-
+from owltracker.data.user_settings import TASKS_LIST_SETTINGS
+from requests.exceptions import ConnectionError as ConnectionErrorRequests
 
 class Model:
     def __init__(self) -> None:
@@ -21,10 +20,15 @@ class Model:
     def fetch_tasks_list_selector(self) -> None:
         integrations_tasks = list()
         for integration in self.task_sources.values():
-            integration_tasks = integration.get_list_tasks()
-            integrations_tasks += integration_tasks
+            try:
+                integration_tasks = integration.get_list_tasks()
+                integrations_tasks += integration_tasks
+            except ConnectionErrorRequests:
+                if isinstance(integration, LocalTask):
+                    break
+                raise 
 
-        manually_added_tasks = get_entry_user_settings(tasks_list_settings, list())
+        manually_added_tasks = get_entry_user_settings(TASKS_LIST_SETTINGS, list())
         self._current_tasks = manually_added_tasks + integrations_tasks
 
     def update_time_integration(self, task_time: float):

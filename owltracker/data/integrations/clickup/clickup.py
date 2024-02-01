@@ -6,6 +6,7 @@ from owltracker.data.integrations.clickup.task_clickup import ClickupTask
 from owltracker.data.integrations.integration import Integration
 
 from dotenv import load_dotenv
+from retry import retry
 
 load_dotenv()
 
@@ -20,6 +21,7 @@ class Clickup(Integration):
             'Authorization': os.getenv('api_token')
         }
 
+    @retry(exceptions=requests.exceptions.ConnectionError, tries=3, delay=1, backoff=2)
     def get_list_tasks(self) -> list[dict]:
         params = {"statuses[0]": 'this week', 'subtasks': True}
         url = self.BASE_URL + f"/team/{self.WORKSPACE_ID}/task?"

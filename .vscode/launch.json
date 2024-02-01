@@ -10,7 +10,7 @@
     "program": "${workspaceFolder}/owltracker/main.py",
     "console": "integratedTerminal",
     "justMyCode": true,
-    "cwd": "${workspaceFolder}",
+    "cwd": "${workspaceFolder}/",
     "env": {
         "PYTHONPATH": "${workspaceFolder}/"
     }
