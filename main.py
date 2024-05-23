@@ -2,9 +2,8 @@ from owltracker.data.integrations.task import LocalTask
 from owltracker.data.integrations.task import Task
 from owltracker.data.model import Model
 from owltracker.ui.notification import Notification
-from owltracker.utils import time_to_formated_string
 from owltracker.idle import get_idle_time
-from owltracker.ui.layouts import input_task_key
+from owltracker.ui.layouts import input_task_key, update_time
 from owltracker.ui.layouts import start_text_stopwatch_button
 from owltracker.ui.layouts import stop_text_stopwatch_button
 from owltracker.ui.layouts import update_idle_text
@@ -28,7 +27,8 @@ from owltracker.data.user_settings import add_used_task
 import PySimpleGUI as sg
 
 import time
-
+import os
+print("LS",os.system("ls"))
 
 class Controller:
     def __init__(self) -> None:
@@ -58,7 +58,6 @@ class Controller:
                     self.stopwatch_active = True
                     self.start_time = time.time()
                     stop_text_stopwatch_button(window)
-                    task_notification_start_time = time.time() # move to view
                     # add_used_task(task_name) # TODO implement it
                 else:                    # CLiCK STOP TIMER
                     self.stopwatch_active = False
@@ -66,12 +65,10 @@ class Controller:
                     print(f"Ran for {time_spent} seconds")
                     self.model.save_time(self.model.current_task, time_spent) # move to model
                     start_text_stopwatch_button(window)
-                    task_notification_start_time = time.time() # move to view
             
             # Update timer
             if event == '__TIMEOUT__' and self.stopwatch_active and window.Title != idle_title_window:
-                elapsed_time = time_to_formated_string(time.time() - self.start_time) # to view
-                window[stopwatch_text_key].update(elapsed_time) # to view
+                update_time(window, self.start_time)
 
             # Click to Minimize window
             if event == minimize_button_key:
@@ -93,8 +90,9 @@ class Controller:
                     window = create_after_idle_window()
                     self.idle_start_time = time.time() - self.idle_time
                     continue # need to 'read' again to execute code
-                else:
-                    update_idle_text(window, self.idle_time)
+            
+            if window.Title == idle_title_window:
+                update_idle_text(window, self.idle_time)
             
             set_last_window_location(window.Title, window.current_location())
             
@@ -116,16 +114,17 @@ class Controller:
             # Actions for idle screen
             if event == ignore_time_key:
                 window.close()
-                window = create_minimized_window(self.task_name)
+                window = create_minimized_window(self.model.current_task)
                 self.notification.task_notification_start_time = time.time()
                 self.idle_time = 0
             if event == subtract_time_key:
                 self.start_time += time.time() - self.idle_start_time
                 window.close()
-                window = create_minimized_window(self.task_name)
+                window = create_minimized_window(self.model.current_task)
                 self.notification.task_notification_start_time = time.time()
                 self.idle_time = 0
-            print("idle", self.idle_time)
+
+            print("idle", self.idle_time, )
         window.close()
         
         

@@ -10,7 +10,7 @@ tasks_list_settings = 'tasks_list'
 
 
 class Model:
-    TIMES_FILES = os.path.join(os.path.dirname(os.path.dirname(__file__)), "time_database.csv") 
+    TIMES_FILES = os.path.join("time_database.csv") 
     COLUMNS_TIME_FILES = ['Time Input', 'Task Name', 'Time Spent', "Integration", "Integration ID"]
     def __init__(self) -> None:
         self.integrations = {"clickup": Clickup()}
@@ -47,5 +47,5 @@ class Model:
         with open(self.TIMES_FILES, 'a') as f:
             f.write(";".join([now, task.title, f"{time:.0f}", task.integration, task.id]))
             f.write("\n")
-        
+            
         self.update_time_integration(task, time)

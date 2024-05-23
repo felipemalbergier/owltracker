@@ -3,3 +3,4 @@ plyer==2.0.0
 requests==2.28.1
 grequests==0.6.0
 PyYAML==6.0
+pyinstaller==5.4.1

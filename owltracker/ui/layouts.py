@@ -1,5 +1,7 @@
 import PySimpleGUI as sg
 from owltracker.data.user_settings import get_last_window_location
+from owltracker.utils import time_to_formated_string
+import time
 
 input_task_key = '-INPUT_TASK-'
 stopwatch_button_key = '-STOPWATCH_BUTTON-'
@@ -92,3 +94,7 @@ def start_text_stopwatch_button(window):
     
 def update_idle_text(window, idle_time):
     window[idle_text_key].update(create_idle_text(idle_time))
+
+def update_time(window, start_time):
+    elapsed_time = time_to_formated_string(time.time() - start_time) # to view
+    window[stopwatch_text_key].update(elapsed_time)

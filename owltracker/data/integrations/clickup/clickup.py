@@ -5,8 +5,8 @@ import time
 from owltracker.data.integrations.clickup.task_clickup import ClickupTask
 from owltracker.data.integrations.integration import Integration
 
-with open("config.json") as f:
-    config = yaml.safe_load(f)
+with open("config.yaml") as f:
+    config = yaml.safe_load(f)['clickup']
 
 class Clickup(Integration):
     BASE_URL = "https://api.clickup.com/api/v2/"
