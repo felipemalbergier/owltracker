@@ -18,3 +18,6 @@ The `.env` file should look like this:
 ```workspace_id=XXXX
 api_token=YYYY```
 - Then you need to run `main.py` but with PYTHONPATH=. in the main directory
+
+## Requirements in Linux
+- sudo apt-get install wmctrl
