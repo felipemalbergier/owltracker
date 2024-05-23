@@ -16,6 +16,9 @@ class Activity:
         if platform == "win32":
             from owltracker.data.activity_tracker.activity_tracker_windows import get_active_window_info_windows
             self.get_active_window_info = get_active_window_info_windows
+        elif platform == "linux":
+            from owltracker.data.activity_tracker.activity_tracker_linux import get_active_window_info_linux
+            self.get_active_window_info = get_active_window_info_linux
         else:
             raise NotImplementedError(f"Not implemented idle time for platform: {platform}")
 

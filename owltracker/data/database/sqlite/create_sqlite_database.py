@@ -1,6 +1,3 @@
-from sqlite_database import SQLiteDatabase
-FAt
-
 def get_query_create_activity_table(drop_tables=False):
 
     query = """
@@ -47,11 +44,3 @@ def get_query_create_task_source_table(drop_tables=False):
         query = "DROP TABLE IF EXISTS task_source;" + query
 
     return query
-
-if __name__ == "__main__":
-    query = get_query_create_activity_table()
-    sql = SQLiteDatabase()
-    sql.excecute_script(query)
-    # sql.excecute_query("INSERT INTO activity (process_name, window_title) VALUES ('hi', 'hiii')", commit=True)
-    # print(sql.select_query("select * from activity"))
-    print("FINITO")
