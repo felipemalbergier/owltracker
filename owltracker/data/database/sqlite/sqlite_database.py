@@ -14,6 +14,8 @@ class SQLiteDatabase(DatabaseBase):
         self.last_window_title = None
 
     def excecute_query(self, query, values=None, commit=False):
+        if values is None:
+            values = list()
         response = self.cursor.execute(query, tuple(values) or tuple())
         if commit:
             self.connection.commit()

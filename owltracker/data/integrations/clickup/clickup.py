@@ -21,14 +21,17 @@ class Clickup(Integration):
             'Authorization': os.getenv('api_token')
         }
 
-    @retry(exceptions=requests.exceptions.ConnectionError, tries=3, delay=1, backoff=2)
     def get_list_tasks(self) -> list[dict]:
         params = {"statuses[0]": 'this week', 'subtasks': True}
         url = self.BASE_URL + f"/team/{self.WORKSPACE_ID}/task?"
-        response = self.request_api("GET", url, self.headers, params=params)
+        try: 
+            response = self.request_api("GET", url, self.headers, params=params)
+            response_data = response.json()
+        except requests.exceptions.ConnectionError:
+            response_data = {'tasks': list()}            
 
         tasks = list()
-        for task in response.json().get('tasks', {}):
+        for task in response_data.get('tasks', {}):
             processed_task = ClickupTask(original_data=task)
             tasks.append(processed_task)
         return tasks
