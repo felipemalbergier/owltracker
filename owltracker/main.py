@@ -74,6 +74,8 @@ class Controller:
             self.view.update_idle_text(time.time() - self.idle_start_time)
 
     def handle_task_notification(self):
+        if self.notification.is_quiet_time():
+            return
         if not self.stopwatch_active and time.time() - self.notification.task_notification_start_time > self.notification.LIMIT_TIME_NO_TASK_SELECTED:
             self.notification.notify_not_working_task()
         if self.stopwatch_active and time.time() - self.notification.task_notification_start_time > self.notification.LIMIT_TIME_WITH_TASK_SELECTED:

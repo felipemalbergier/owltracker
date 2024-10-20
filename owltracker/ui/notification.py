@@ -1,4 +1,3 @@
-from tkinter.tix import TList
 from plyer import notification
 import time
 import os
@@ -11,6 +10,8 @@ class Notification:
     LIMIT_IDLE_TIME_WITH_TASK = 15 * 60  # in seconds
     LIMIT_TIME_NO_TASK_SELECTED = 15 * 60  # in seconds
     LIMIT_TIME_WITH_TASK_SELECTED = 30 * 60 # in seconds
+    QUIET_TIME_START = 21  # in hours
+    QUIET_TIME_END = 10  # in hours
 
     def __init__(self) -> None:
         pass
@@ -52,6 +53,10 @@ class Notification:
         timeout=5
         self._send_notification(title, message, timeout)
 
+    def is_quiet_time(self) -> bool:
+        current_hour = time.localtime().tm_hour
+        return not self.QUIET_TIME_END <= current_hour < self.QUIET_TIME_START
+
 if __name__ == "__main__":
     n = Notification()
-    n.notify_working_same_task("sd")
+    n.is_quiet_time()
