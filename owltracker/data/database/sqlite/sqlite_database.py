@@ -1,6 +1,7 @@
 import sqlite3
 
 from owltracker.data.database.database_base import DatabaseBase
+from owltracker.data.database.sqlite.create_sqlite_database import get_query_create_activity_table, get_query_create_task_source_table, get_query_create_task_table
 from owltracker.utils import WAIT_TIME_MSECONDS
 
 
@@ -16,7 +17,12 @@ class SQLiteDatabase(DatabaseBase):
     def excecute_query(self, query, values=None, commit=False):
         if values is None:
             values = list()
-        response = self.cursor.execute(query, tuple(values) or tuple())
+        try:
+            response = self.cursor.execute(query, tuple(values) or tuple())
+        except sqlite3.OperationalError as e:
+            if "no such table" in str(e):
+                self.create_all_tables()
+
         if commit:
             self.connection.commit()
         return response.fetchall()
@@ -35,6 +41,10 @@ class SQLiteDatabase(DatabaseBase):
         query = f"INSERT INTO activity ({','.join(activity.keys())}) VALUES ({','.join(['?'] * len(activity))});"
         self.excecute_query(query, activity.values(), commit=True)
 
+    def create_all_tables(self):
+        self.excecute_query(get_query_create_activity_table())
+        self.excecute_query(get_query_create_task_table())
+        self.excecute_query(get_query_create_task_source_table())
 
 
 if __name__ == '__main__':

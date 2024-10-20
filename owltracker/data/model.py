@@ -24,9 +24,8 @@ class Model:
                 integration_tasks = integration.get_list_tasks()
                 integrations_tasks += integration_tasks
             except ConnectionErrorRequests:
-                if isinstance(integration, LocalTask):
+                # if isinstance(integration, LocalTask):
                     break
-                raise 
 
         manually_added_tasks = get_entry_user_settings(TASKS_LIST_SETTINGS, list())
         self._current_tasks = manually_added_tasks + integrations_tasks

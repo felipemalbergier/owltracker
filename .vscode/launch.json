@@ -5,11 +5,12 @@
     "version": "0.2.0",
 "configurations": [{
     "name": "Run Main",
-    "type": "python",
+    "type": "debugpy",
     "request": "launch",
     "program": "${workspaceFolder}/owltracker/main.py",
     "console": "integratedTerminal",
     "justMyCode": true,
+    "python": "/home/felipe/.pyenv/versions/owltracker/bin/python",
     "cwd": "${workspaceFolder}/",
     "env": {
         "PYTHONPATH": "${workspaceFolder}/"
@@ -17,13 +18,12 @@
     },
     {
     "name": "Python: Current File",
-    "type": "python",
+    "type": "debugpy",
     "request": "launch",
     "program": "${file}",
     "console": "integratedTerminal",
     "cwd": "${workspaceFolder}",
-    // "python": "/home/felipe/projects/side_quest/Taatika/",
-    // "python.pythonPath": "${config.python.pythonPath}",
+    "python": "/home/felipe/.pyenv/versions/owltracker/bin/python",
     "env": {
         "PYTHONPATH": "${workspaceFolder}/"
     }

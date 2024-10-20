@@ -115,7 +115,7 @@ class Controller:
             self.handle_idle_screen_actions(event)
             if self.idle_time < 1 and self.view.window.Title != self.view.idle_title_window:
                 self.activity.log_activity(event=event)
-            print(datetime.now(), "idle", self.idle_time)
+            print(datetime.now(), "idle", self.idle_time, "time task:", time.time() - self.start_time)
         self.view.window.close()
 
 

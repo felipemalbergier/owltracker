@@ -10,7 +10,7 @@ def _get_idle_time_windows():
     return get_idle_windows()
 
 def _get_idle_time_linux():
-    from idle_linux import get_idle_linux
+    from owltracker.idle_time.idle_linux import get_idle_linux
     return get_idle_linux()
 
 if sys_platform == "win32":
