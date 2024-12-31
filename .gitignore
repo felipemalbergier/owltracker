@@ -134,3 +134,5 @@ config.yaml
 
 *.db
 .idea/
+
+launch.json
