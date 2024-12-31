@@ -1,7 +1,7 @@
+# skipping because there is no credentials in github actions
 import unittest
 from unittest.mock import Mock, MagicMock, patch
 from owltracker.ui.view import View
-
 
 class TestController(unittest.TestCase):
 

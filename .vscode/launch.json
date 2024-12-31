@@ -10,7 +10,7 @@
     "program": "${workspaceFolder}/owltracker/main.py",
     "console": "integratedTerminal",
     "justMyCode": true,
-    "python": "/home/felipe/.pyenv/versions/owltracker/bin/python",
+    "python": "your/python/path",
     "cwd": "${workspaceFolder}/",
     "env": {
         "PYTHONPATH": "${workspaceFolder}/"
@@ -23,9 +23,28 @@
     "program": "${file}",
     "console": "integratedTerminal",
     "cwd": "${workspaceFolder}",
-    "python": "/home/felipe/.pyenv/versions/owltracker/bin/python",
+    "python": "your/python/path",
     "env": {
         "PYTHONPATH": "${workspaceFolder}/"
     }
+    }
+    ,
+    {
+        "name": "Run Unittests",
+        "type": "debugpy",
+        "request": "launch",
+        "module": "unittest",
+        "args": [
+            "discover",
+            "-s",
+            "tests"
+        ],
+        "console": "integratedTerminal",
+        "justMyCode": true,
+        "python": "your/python/path",
+        "cwd": "${workspaceFolder}/",
+        "env": {
+            "PYTHONPATH": "${workspaceFolder}/"
+        }
     }
 ]}
