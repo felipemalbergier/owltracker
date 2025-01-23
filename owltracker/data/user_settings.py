@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from utils import location_in_screen_size
 
 LAST_LOCATION_SETTINGS_FORMAT = '-LAST_LOCATION_{}-'
 TASKS_LIST_SETTINGS = 'tasks_list'
@@ -25,13 +26,8 @@ def add_used_task(task_name: str) -> None:
 
 def get_last_window_location(window_title):
     location = get_entry_user_settings(LAST_LOCATION_SETTINGS_FORMAT.format(window_title), INITIAL_WINDOW_POSITION)
-    screen_size = sg.Window.get_screen_size()
-    return location if location_in_screen_size(location, screen_size) else INITIAL_WINDOW_POSITION
+    return location
 
 
 def set_last_window_location(window_title, location):
     set_entry_user_settings(LAST_LOCATION_SETTINGS_FORMAT.format(window_title), location)
-
-
-def location_in_screen_size(location: tuple, screen_size: tuple) -> bool:
-    return 0 < location[0] < screen_size[0] - 10 and 0 < location[1] < screen_size[1] - 10
