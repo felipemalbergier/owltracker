@@ -4,10 +4,10 @@ from owltracker.data.model import Model
 from owltracker.ui.notification import Notification
 from owltracker.ui.view import View
 from owltracker.utils import WAIT_TIME_MSECONDS
+from owltracker.utils import time_to_formated_string
 from owltracker.idle_time.idle import get_idle_time
 from owltracker.data.user_settings import set_last_window_location
 from owltracker.data.activity_tracker.activity_tracker import Activity
-
 import time
 from datetime import datetime
 
@@ -109,13 +109,14 @@ class Controller:
                 continue  # need to 'read' again to refresh the window
 
             self.update_idle_text()
+            self.view.make_window_reachable()
             set_last_window_location(self.view.window.Title, self.view.window.current_location())
             self.handle_task_input(values)
             self.handle_task_notification()
             self.handle_idle_screen_actions(event)
             if self.idle_time < 1 and self.view.window.Title != self.view.idle_title_window:
                 self.activity.log_activity(event=event)
-            print(datetime.now(), "idle", self.idle_time, "time task:", time.time() - self.start_time)
+            print(datetime.now(), "idle", self.idle_time, "time task:", time_to_formated_string(time.time() - self.start_time))
         self.view.window.close()
 
 

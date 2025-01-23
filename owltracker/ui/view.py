@@ -2,7 +2,8 @@ import time
 import PySimpleGUI as sg
 from owltracker.data.user_settings import get_last_window_location
 from owltracker.utils import time_to_formated_string
-
+from owltracker.utils import location_in_screen_size
+from owltracker.data.user_settings import INITIAL_WINDOW_POSITION
 
 class View:
     input_task_key = '-INPUT_TASK-'
@@ -138,3 +139,9 @@ class View:
 
     def get_task_input(self, values):
         return values[self.input_task_key]
+
+    def make_window_reachable(self):
+        screen_size = sg.Window.get_screen_size()
+        if not location_in_screen_size(self.window.current_location(), screen_size):
+            if self.window:
+                self.window.move(*INITIAL_WINDOW_POSITION)
