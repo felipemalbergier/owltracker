@@ -2,8 +2,7 @@ import time
 import PySimpleGUI as sg
 from owltracker.data.user_settings import get_last_window_location
 from owltracker.utils import time_to_formated_string
-from owltracker.utils import location_in_screen_size
-from owltracker.data.user_settings import INITIAL_WINDOW_POSITION
+
 
 class View:
     input_task_key = '-INPUT_TASK-'
