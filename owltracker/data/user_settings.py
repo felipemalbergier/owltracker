@@ -26,7 +26,8 @@ def add_used_task(task_name: str) -> None:
 
 def get_last_window_location(window_title):
     location = get_entry_user_settings(LAST_LOCATION_SETTINGS_FORMAT.format(window_title), INITIAL_WINDOW_POSITION)
-    return location
+    screen_size = sg.Window.get_screen_size()
+    return location if location_in_screen_size(location, screen_size) else INITIAL_WINDOW_POSITION
 
 
 def set_last_window_location(window_title, location):

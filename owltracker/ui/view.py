@@ -139,9 +139,3 @@ class View:
 
     def get_task_input(self, values):
         return values[self.input_task_key]
-
-    def make_window_reachable(self):
-        screen_size = sg.Window.get_screen_size()
-        if not location_in_screen_size(self.window.current_location(), screen_size):
-            if self.window:
-                self.window.move(*INITIAL_WINDOW_POSITION)

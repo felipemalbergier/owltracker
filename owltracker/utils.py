@@ -15,7 +15,3 @@ def time_to_formated_string(time_time: float):
         return f"{minutes}:{seconds}"
     else:
         return f'{time_time % 60:.1f}'
-
-def location_in_screen_size(location: tuple, screen_size: tuple) -> bool:
-    return 0 < location[0] < screen_size[0] - 10 and 0 < location[1] < screen_size[1] - 10
-    
