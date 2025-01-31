@@ -7,7 +7,6 @@ from owltracker.utils import WAIT_TIME_MSECONDS
 from owltracker.idle_time.idle import get_idle_time
 from owltracker.data.user_settings import set_last_window_location
 from owltracker.data.activity_tracker.activity_tracker import Activity
-
 import time
 from datetime import datetime
 
@@ -74,7 +73,8 @@ class Controller:
             self.view.update_idle_text(time.time() - self.idle_start_time)
 
     def handle_task_notification(self):
-        if self.notification.is_quiet_time():
+        if self.notification.is_quiet_time() or self.view.is_window_idle() or \
+            self.idle_time > min(self.notification.LIMIT_IDLE_TIME_WITH_TASK, self.notification.LIMIT_TIME_NO_TASK_SELECTED):
             return
         if not self.stopwatch_active and time.time() - self.notification.task_notification_start_time > self.notification.LIMIT_TIME_NO_TASK_SELECTED:
             self.notification.notify_not_working_task()

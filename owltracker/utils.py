@@ -15,4 +15,3 @@ def time_to_formated_string(time_time: float):
         return f"{minutes}:{seconds}"
     else:
         return f'{time_time % 60:.1f}'
-
