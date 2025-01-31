@@ -31,3 +31,6 @@ def get_last_window_location(window_title):
 
 def set_last_window_location(window_title, location):
     set_entry_user_settings(LAST_LOCATION_SETTINGS_FORMAT.format(window_title), location)
+
+def location_in_screen_size(location: tuple, screen_size: tuple) -> bool:
+    return 0 < location[0] < screen_size[0] - 10 and 0 < location[1] < screen_size[1] - 10
