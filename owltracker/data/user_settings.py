@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-from utils import location_in_screen_size
 
 LAST_LOCATION_SETTINGS_FORMAT = '-LAST_LOCATION_{}-'
 TASKS_LIST_SETTINGS = 'tasks_list'
